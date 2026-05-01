@@ -33,7 +33,7 @@ export function Contact() {
     const body = String(data.get("message") ?? "").trim();
     if (!name || !email || !body) {
       setStatus("error");
-      setMessage("Completa nombre, email y mensaje.");
+      setMessage("Please fill in name, email, and message.");
       return;
     }
     setStatus("loading");
@@ -45,14 +45,14 @@ export function Contact() {
         body: JSON.stringify({ name, email, message: body }),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error ?? "Error al enviar");
+      if (!res.ok) throw new Error(json.error ?? "Failed to send");
       setStatus("ok");
-      setMessage("Gracias — te responderé pronto.");
+      setMessage("Thanks — I&apos;ll get back to you soon.");
       form.reset();
     } catch {
       setStatus("error");
       setMessage(
-        "No se pudo enviar. Configura Resend en Vercel o usa el enlace de Formspree del README.",
+        "Could not send. Configure Resend on Vercel or use the Formspree option in the README.",
       );
     }
   }

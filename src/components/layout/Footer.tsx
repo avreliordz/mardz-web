@@ -22,7 +22,7 @@ export function Footer() {
         </p>
         <nav
           className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-widest text-fog"
-          aria-label="Pie de página"
+          aria-label="Footer"
         >
           {nav.map((l) => (
             <Link key={l.href} href={l.href} className="hover:text-paper">
@@ -38,7 +38,7 @@ export function Footer() {
             type="button"
             onClick={scrollTop}
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-paper"
-            aria-label="Volver arriba"
+            aria-label="Back to top"
           >
             <ArrowUp className="h-4 w-4" aria-hidden />
             Back to top

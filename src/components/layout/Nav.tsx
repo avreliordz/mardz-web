@@ -41,12 +41,12 @@ export function Nav() {
           <Link
             href="/"
             className="font-mono text-xs tracking-[0.25em] text-paper"
-            aria-label="MARDZ, inicio"
+            aria-label="MARDZ, home"
           >
             MARDZ™
           </Link>
 
-          <nav className="hidden items-center gap-10 md:flex" aria-label="Principal">
+          <nav className="hidden items-center gap-10 md:flex" aria-label="Main">
             {links.map((l) => (
               <motion.a
                 key={l.href}
@@ -61,7 +61,7 @@ export function Nav() {
                 </span>
               </motion.a>
             ))}
-            <MagneticButton href="#contact" aria-label="Ir a contacto">
+            <MagneticButton href="#contact" aria-label="Go to contact">
               <span className="rounded-full border border-paper px-4 py-2 font-mono text-xs uppercase tracking-widest text-paper transition-colors duration-300 hover:bg-paper hover:text-black">
                 Let&apos;s talk →
               </span>
@@ -75,7 +75,7 @@ export function Nav() {
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="sr-only">{open ? "Cerrar menú" : "Abrir menú"}</span>
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
@@ -91,7 +91,7 @@ export function Nav() {
             transition={{ duration: motionDuration.base, ease: motionEasing }}
             className="fixed inset-0 z-[100] flex flex-col bg-black pt-24 md:hidden"
           >
-            <nav className="flex flex-1 flex-col gap-6 px-8 py-8" aria-label="Móvil">
+            <nav className="flex flex-1 flex-col gap-6 px-8 py-8" aria-label="Mobile">
               {links.map((l, i) => (
                 <motion.a
                   key={l.href}

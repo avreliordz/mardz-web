@@ -21,7 +21,7 @@ export function Work() {
             Featured work
           </h2>
           <p className="mt-4 max-w-xl text-fog">
-            Selección de proyectos — estrategia, diseño y construcción.
+            Featured projects — strategy, design, and build.
           </p>
         </ScrollReveal>
 

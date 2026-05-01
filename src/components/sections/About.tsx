@@ -24,10 +24,10 @@ export function About() {
         <div className="mt-16 grid gap-16 md:grid-cols-[1.2fr_1fr]">
           <ScrollReveal>
             <p className="max-w-2xl text-base leading-relaxed text-ink/90 md:text-lg">
-              Mi trayectoria comenzó en digital arts y evolucionó hacia
-              soluciones escalables. He colaborado con startups VC-backed y
-              Fortune 500 como Puma, Adidas y News Corp, siempre buscando
-              construir puentes entre diseño e ingeniería.
+              My path started in digital arts and evolved toward scalable
+              solutions. I&apos;ve worked with VC-backed startups and Fortune
+              500 companies such as Puma, Adidas, and News Corp—always bridging
+              design and engineering.
             </p>
           </ScrollReveal>
 
@@ -36,19 +36,19 @@ export function About() {
               <div>
                 <dt className="font-display text-5xl text-ink">10+</dt>
                 <dd className="mt-1 font-mono text-xs uppercase tracking-widest text-ash">
-                  años de experiencia
+                  years of experience
                 </dd>
               </div>
               <div>
                 <dt className="font-display text-5xl text-ink">2</dt>
                 <dd className="mt-1 font-mono text-xs uppercase tracking-widest text-ash">
-                  continentes de clientes
+                  continents of clients
                 </dd>
               </div>
               <div>
                 <dt className="font-display text-5xl text-ink">∞</dt>
                 <dd className="mt-1 font-mono text-xs uppercase tracking-widest text-ash">
-                  hipótesis validadas
+                  hypotheses validated
                 </dd>
               </div>
             </dl>

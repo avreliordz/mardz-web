@@ -35,7 +35,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           "relative grid gap-6 border-b border-graphite py-8 transition-colors duration-300 md:grid-cols-[1fr_auto] md:items-end",
           hover && "bg-carbon/90",
         )}
-        aria-label={`Ver proyecto ${project.title}`}
+        aria-label={`View project ${project.title}`}
         data-cursor-hover
       >
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:gap-10">
@@ -73,7 +73,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
               className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(100%,420px)] items-center border-l border-graphite/50 bg-black/40 px-6 py-6 backdrop-blur-sm md:flex"
             >
               <p className="text-left text-sm leading-relaxed text-fog">
-                Explora el caso: rol, proceso y resultados para{" "}
+                Open the case: role, process, and outcomes for{" "}
                 <span className="text-paper">{project.title}</span>.
               </p>
             </motion.div>

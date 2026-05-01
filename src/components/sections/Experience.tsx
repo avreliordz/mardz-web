@@ -23,7 +23,7 @@ const entries = [
   {
     range: "2022–2025",
     title: "Wizeline Design Lead",
-    detail: "Staff aug + equipo",
+    detail: "Staff aug + team",
   },
   {
     range: "2025–Now",

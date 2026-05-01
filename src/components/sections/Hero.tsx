@@ -48,7 +48,7 @@ export function Hero() {
             className="flex flex-col gap-6 border-t border-graphite/40 pt-8 md:border-t-0 md:pt-0"
           >
             <ul className="space-y-3 font-mono text-sm text-fog">
-              <li>— 10+ años de experiencia</li>
+              <li>— 10+ years of experience</li>
               <li>— Startups → Fortune 500</li>
               <li>— Design × Code</li>
             </ul>

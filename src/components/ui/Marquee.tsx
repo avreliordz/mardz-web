@@ -35,7 +35,7 @@ export function Marquee({
         "relative overflow-hidden border-t border-graphite/80 py-4",
         className,
       )}
-      aria-label={`Clientes: ${text}`}
+      aria-label={`Clients: ${text}`}
     >
       <div className="animate-marquee flex w-max will-change-transform">
         {track}

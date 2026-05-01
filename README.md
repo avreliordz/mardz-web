@@ -1,83 +1,83 @@
-# MARDZ — Portfolio web
+# MARDZ — Portfolio site
 
-Sitio de portafolio personal (Next.js 14, App Router, TypeScript, Tailwind CSS, Framer Motion), según el PRD del repositorio. Dominio previsto: [marcoaurelio.mx](https://marcoaurelio.mx).
+Personal portfolio (Next.js 14, App Router, TypeScript, Tailwind CSS, Framer Motion) per the repo PRD. Target domain: [marcoaurelio.mx](https://marcoaurelio.mx).
 
-## Requisitos
+## Requirements
 
 - Node.js 18+
-- npm (o pnpm/yarn)
+- npm (or pnpm/yarn)
 
-## Desarrollo local
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-### Si el sitio se ve sin estilos y en consola hay 404 en `/_next/static/...`
+### If the site looks unstyled and the console shows 404s for `/_next/static/...`
 
-Suele ser caché o carpeta `.next` inconsistente (por ejemplo proyectos en `Desktop` con iCloud). Para el servidor (`Ctrl+C`) y ejecuta:
+Usually a stale or inconsistent `.next` folder (common for projects on `Desktop` with iCloud). Stop the server (`Ctrl+C`) and run:
 
 ```bash
 npm run dev:clean
 ```
 
-Eso borra `.next` y arranca de nuevo. Opcional: recarga forzada en el navegador (vacía caché).
+That deletes `.next` and restarts. Optional: hard refresh or clear the browser cache.
 
-## Variables de entorno (contacto por correo)
+## Environment variables (contact email)
 
-El formulario usa la API `/api/contact` con [Resend](https://resend.com).
+The form uses the `/api/contact` API with [Resend](https://resend.com).
 
-1. Copia `.env.example` a `.env.local`.
-2. Configura:
+1. Copy `.env.example` to `.env.local`.
+2. Set:
 
-- `RESEND_API_KEY` — API key de Resend.
-- `CONTACT_TO_EMAIL` — correo donde recibes los mensajes.
-- `CONTACT_FROM` — remitente verificado en Resend (p. ej. `Portfolio <onboarding@resend.dev>` en pruebas).
+- `RESEND_API_KEY` — Resend API key.
+- `CONTACT_TO_EMAIL` — Inbox where you receive messages.
+- `CONTACT_FROM` — Verified sender in Resend (e.g. `Portfolio <onboarding@resend.dev>` for tests).
 
-Sin estas variables, la API responde 503 y el cliente muestra un mensaje para configurar el servicio o usar el fallback.
+Without these, the API returns 503 and the UI prompts you to configure the service or use the fallback.
 
-### Fallback sin backend: Formspree
+### No-backend fallback: Formspree
 
-1. Crea un formulario en [Formspree](https://formspree.io).
-2. Opción A: en `src/components/sections/Contact.tsx`, sustituye el `fetch` por un `action` apuntando a la URL del formulario.
-3. Opción B: enlaza un botón “Contactar” a esa URL desde el CTA.
+1. Create a form at [Formspree](https://formspree.io).
+2. Option A: In `src/components/sections/Contact.tsx`, replace the `fetch` with a form `action` pointing to the Formspree URL.
+3. Option B: Link a “Contact” button to that URL from the CTA.
 
-## Despliegue en Vercel vía GitHub
+## Deploy on Vercel via GitHub
 
-1. Sube el código a un repositorio en GitHub (si aún no existe):
+1. Push the code to GitHub (if needed):
 
    ```bash
    git add .
    git commit -m "Initial portfolio site"
    git branch -M main
-   git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
+   git remote add origin https://github.com/YOUR_USER/YOUR_REPO.git
    git push -u origin main
    ```
 
-2. En [Vercel](https://vercel.com): **Add New Project** → Import el repo de GitHub.
-3. Framework: Next.js (detectado automáticamente). Variables de entorno: añade `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM` en **Settings → Environment Variables** (Production / Preview según necesites).
-4. **Dominio personalizado**: en el proyecto → **Settings → Domains** → añade `marcoaurelio.mx` y los registros DNS que indique tu proveedor (A/AAAA o CNAME hacia Vercel).
+2. In [Vercel](https://vercel.com): **Add New Project** → import the GitHub repo.
+3. Framework: Next.js (auto-detected). Add `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM` under **Settings → Environment Variables** (Production / Preview as needed).
+4. **Custom domain**: **Settings → Domains** → add `marcoaurelio.mx` and the DNS records your registrar shows (A/AAAA or CNAME to Vercel).
 
 ## Scripts
 
-| Comando        | Descripción              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Servidor de desarrollo   |
-| `npm run build` | Build de producción    |
-| `npm run start` | Servidor tras `build`  |
-| `npm run lint`  | ESLint                   |
+| Command         | Description           |
+| --------------- | --------------------- |
+| `npm run dev`   | Development server    |
+| `npm run build` | Production build      |
+| `npm run start` | Server after `build`  |
+| `npm run lint`  | ESLint                |
 
-## Estructura principal
+## Project layout
 
-- `src/app/` — rutas (`/`, `/work/[slug]`, `/api/contact`, `sitemap.ts`).
-- `src/components/` — layout, secciones y UI.
-- `src/data/` — proyectos, capacidades, speaking.
-- `src/styles/globals.css` — tokens de diseño (paleta monocromática, tipografía).
-- `public/og-image.jpg` — imagen Open Graph (sustituible).
+- `src/app/` — routes (`/`, `/work/[slug]`, `/api/contact`, `sitemap.ts`).
+- `src/components/` — layout, sections, UI.
+- `src/data/` — projects, capabilities, speaking.
+- `src/styles/globals.css` — design tokens (monochrome palette, typography).
+- `public/og-image.jpg` — Open Graph image (replaceable).
 
-## Documentación
+## Spec
 
-Especificación de producto: [PORTFOLIO-PRD.md](./PORTFOLIO-PRD.md).
+Product requirements: [PORTFOLIO-PRD.md](./PORTFOLIO-PRD.md).

@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   if (!name || !email || !message) {
     return NextResponse.json(
-      { error: "Nombre, email y mensaje son obligatorios." },
+      { error: "Name, email, and message are required." },
       { status: 400 },
     );
   }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "Servicio de correo no configurado. Añade variables en Vercel o usa Formspree (README).",
+          "Email service not configured. Add environment variables on Vercel or use Formspree (see README).",
       },
       { status: 503 },
     );
@@ -43,14 +43,14 @@ export async function POST(request: Request) {
     from,
     to: [to],
     replyTo: email,
-    subject: `[mardz-web] Mensaje de ${name}`,
-    text: `De: ${name} <${email}>\n\n${message}`,
+    subject: `[mardz-web] Message from ${name}`,
+    text: `From: ${name} <${email}>\n\n${message}`,
   });
 
   if (error) {
     console.error("[contact] Resend error:", error);
     return NextResponse.json(
-      { error: "No se pudo enviar el correo." },
+      { error: "Could not send the email." },
       { status: 502 },
     );
   }

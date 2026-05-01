@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // En dev, desactivar caché persistente de webpack evita estados rotos en `.next`
-  // cuando Sync/iCloud u otras herramientas tocan archivos durante `next dev`
-  // (síntoma: 404 en /_next/static/chunks/*.js y CSS sin cargar).
+  // In dev, disable webpack persistent cache to avoid broken `.next` states when
+  // iCloud sync or other tools touch files during `next dev`
+  // (symptom: 404 on /_next/static/chunks/*.js and missing CSS).
   webpack: (config, { dev }) => {
     if (dev) {
       config.cache = false;

@@ -8,7 +8,7 @@ export const speakingEvents: SpeakingEvent[] = [
   {
     year: "2025",
     title: "Business Nights Peak NL",
-    detail: "GameTech Edition · Panelista",
+    detail: "GameTech Edition · Panelist",
   },
   {
     year: "2025",
@@ -23,7 +23,7 @@ export const speakingEvents: SpeakingEvent[] = [
   {
     year: "2023",
     title: "Wizeline Academy",
-    detail: "Use Case Review · Panelista",
+    detail: "Use Case Review · Panelist",
   },
   {
     year: "2022",
