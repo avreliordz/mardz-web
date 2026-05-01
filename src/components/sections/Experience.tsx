@@ -7,30 +7,33 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 const entries = [
   {
     range: "2013–2015",
-    title: "Freelance Web Dev",
-    detail: "CMS, e-commerce, small business",
+    org: "Freelance Professional",
+    role: "Independent Web Developer",
+    quote:
+      "I began offering my professional services working on small business websites and small e-commerce integrations.",
   },
   {
     range: "2017–2019",
-    title: "Butchershop MX",
-    detail: "UX/UI, Design Thinking",
+    org: "Butchershop MX",
+    role: "UX/UI Designer (Entry Level to Medium Level)",
+    quote:
+      "At Butchershop I had the opportunity to refine my expertise towards UX/UI Design and Design Thinking. I joined the team",
   },
   {
-    range: "2019–2022",
-    title: "Wizeline Sr. Designer",
-    detail: "Fortune 500 + startups",
+    range: "2019–2025",
+    org: "Wizeline Services",
+    role: "Product Designer - (Senior Level to Lead Designer)",
+    quote:
+      "I consider Wizeline my biggest professional leap since I collaborated with Fortune 500 companies and very promising, well-backed startups. I started as a Level II designer and by my 4th year I was leader, mentor and tutor at Wizeline Academy.",
   },
   {
-    range: "2022–2025",
-    title: "Wizeline Design Lead",
-    detail: "Staff aug + team",
+    range: "2025–Present Day",
+    org: "Interact Studio",
+    role: "Lead Product Developer",
+    quote:
+      "Today at Interact, I'm leading robust efforts from Hypothesis Validation, User Research to Venture Building.",
   },
-  {
-    range: "2025–Now",
-    title: "Interact Studio",
-    detail: "Venture building, hypothesis validation",
-  },
-];
+] as const;
 
 export function Experience() {
   const ref = useRef<HTMLDivElement>(null);
@@ -74,14 +77,19 @@ export function Experience() {
                 style={{ pathLength: pathProgress }}
               />
             </svg>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4 xl:gap-6">
               {entries.map((e) => (
                 <div key={e.range} className="border-l border-graphite pl-4">
                   <p className="font-mono text-xs uppercase tracking-widest text-ash">
                     {e.range}
                   </p>
-                  <p className="mt-3 font-display text-lg text-paper">{e.title}</p>
-                  <p className="mt-2 text-sm text-fog">{e.detail}</p>
+                  <p className="mt-3 font-display text-lg text-paper">{e.org}</p>
+                  <p className="mt-2 text-sm font-medium leading-snug text-paper/90">
+                    {e.role}
+                  </p>
+                  <p className="mt-3 border-l border-graphite/40 pl-3 text-sm italic leading-relaxed text-fog">
+                    {e.quote}
+                  </p>
                 </div>
               ))}
             </div>
@@ -110,8 +118,13 @@ export function Experience() {
                 <p className="font-mono text-xs uppercase tracking-widest text-ash">
                   {e.range}
                 </p>
-                <p className="mt-2 font-display text-xl text-paper">{e.title}</p>
-                <p className="mt-1 text-sm text-fog">{e.detail}</p>
+                <p className="mt-2 font-display text-xl text-paper">{e.org}</p>
+                <p className="mt-1 text-sm font-medium leading-snug text-paper/90">
+                  {e.role}
+                </p>
+                <p className="mt-3 border-l border-graphite/40 pl-3 text-sm italic leading-relaxed text-fog">
+                  {e.quote}
+                </p>
               </div>
             ))}
           </div>

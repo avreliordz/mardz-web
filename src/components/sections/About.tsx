@@ -12,17 +12,15 @@ export function About() {
     >
       <div className="mx-auto max-w-[1400px]">
         <p className="font-mono-label text-ash">§ 02</p>
-        <h2
-          id="about-heading"
-          className="section-title mt-6 max-w-4xl text-balance text-ink"
-        >
-          I don&apos;t just design it.
-          <br />
-          I build it.
-        </h2>
 
-        <div className="mt-16 grid gap-16 md:grid-cols-[1.2fr_1fr]">
+        <div className="mt-12 grid gap-16 md:grid-cols-[1.2fr_1fr]">
           <ScrollReveal>
+            <h2
+              id="about-heading"
+              className="section-title mb-8 max-w-2xl text-balance text-ink md:mb-10"
+            >
+              I develop and deliver your business end-to-end
+            </h2>
             <p className="max-w-2xl text-base leading-relaxed text-ink/90 md:text-lg">
               My path started in digital arts and evolved toward scalable
               solutions. I&apos;ve worked with VC-backed startups and Fortune
@@ -40,13 +38,13 @@ export function About() {
                 </dd>
               </div>
               <div>
-                <dt className="font-display text-5xl text-ink">2</dt>
+                <dt className="font-display text-5xl text-ink">120+</dt>
                 <dd className="mt-1 font-mono text-xs uppercase tracking-widest text-ash">
-                  continents of clients
+                  clients
                 </dd>
               </div>
               <div>
-                <dt className="font-display text-5xl text-ink">∞</dt>
+                <dt className="font-display text-5xl text-ink">200+</dt>
                 <dd className="mt-1 font-mono text-xs uppercase tracking-widest text-ash">
                   hypotheses validated
                 </dd>
@@ -56,7 +54,7 @@ export function About() {
         </div>
 
         <div className="mt-16 inline-flex rounded-full border border-graphite bg-white/60 px-5 py-2 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink/80">
-          Product Design Lead @ Wizeline 2019–2025
+          Lead Product Developer @Interact Studio
         </div>
       </div>
     </section>

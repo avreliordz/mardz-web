@@ -14,17 +14,15 @@ npm install
 npm run dev
 ```
 
+`npm run dev` **deletes `.next` before starting** so dev doesn’t serve broken chunk paths (common on macOS Desktop + iCloud). For faster restarts when the folder is healthy, use `npm run dev:watch`.
+
 Open [http://localhost:3000](http://localhost:3000).
 
-### If the site looks unstyled and the console shows 404s for `/_next/static/...`
+### If the site still looks unstyled / 404 on `/_next/static/chunks/*.js`
 
-Usually a stale or inconsistent `.next` folder (common for projects on `Desktop` with iCloud). Stop the server (`Ctrl+C`) and run:
-
-```bash
-npm run dev:clean
-```
-
-That deletes `.next` and restarts. Optional: hard refresh or clear the browser cache.
+1. Stop all `next dev` processes (only one server on port 3000).
+2. Run `npm run dev` again (or `rm -rf .next && npm run dev`).
+3. Hard refresh the tab or try an incognito window (old HTML can reference missing chunks).
 
 ## Environment variables (contact email)
 
@@ -63,12 +61,14 @@ Without these, the API returns 503 and the UI prompts you to configure the servi
 
 ## Scripts
 
-| Command         | Description           |
-| --------------- | --------------------- |
-| `npm run dev`   | Development server    |
-| `npm run build` | Production build      |
-| `npm run start` | Server after `build`  |
-| `npm run lint`  | ESLint                |
+| Command             | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| `npm run dev`       | Dev server (removes `.next` first, then `next dev`) |
+| `npm run dev:watch` | Dev server only (no `.next` wipe; faster if cache is OK) |
+| `npm run dev:clean` | Same as `dev` (explicit clean alias)           |
+| `npm run build`     | Production build                                 |
+| `npm run start`     | Server after `build`                             |
+| `npm run lint`      | ESLint                                           |
 
 ## Project layout
 

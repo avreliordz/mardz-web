@@ -8,8 +8,8 @@ const EQ_W = 1024;
 const EQ_H = 512;
 
 /**
- * Equirectangular HDR-style map: soft studio gradient, blurred luminance noise,
- * and a faint perspective grid for chrome reflections (monochrome).
+ * Equirectangular HDR-style map: soft studio gradient and blurred luminance noise
+ * for chrome reflections (monochrome).
  */
 export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
   canvas.width = EQ_W;
@@ -62,39 +62,6 @@ export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
   ctx.filter = "blur(32px)";
   ctx.globalAlpha = 0.5;
   ctx.drawImage(noise, 0, 0, EQ_W, EQ_H);
-  ctx.restore();
-
-  ctx.save();
-  ctx.globalCompositeOperation = "overlay";
-  ctx.strokeStyle = "rgba(255,255,255,0.055)";
-  ctx.lineWidth = 1;
-  const step = 56;
-  for (let x = 0; x <= EQ_W; x += step) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, EQ_H);
-    ctx.stroke();
-  }
-  for (let y = 0; y <= EQ_H; y += step) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(EQ_W, y);
-    ctx.stroke();
-  }
-  ctx.strokeStyle = "rgba(255,255,255,0.03)";
-  const step2 = step * 4;
-  for (let x = 0; x <= EQ_W; x += step2) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, EQ_H);
-    ctx.stroke();
-  }
-  for (let y = 0; y <= EQ_H; y += step2) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(EQ_W, y);
-    ctx.stroke();
-  }
   ctx.restore();
 }
 
