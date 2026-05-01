@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUp } from "lucide-react";
 
 const nav = [
   { href: "#work", label: "Work" },
@@ -10,10 +9,6 @@ const nav = [
 ];
 
 export function Footer() {
-  function scrollTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
   return (
     <footer className="border-t border-graphite bg-black px-5 py-12 md:px-8">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-10 md:flex-row md:items-center md:justify-between">
@@ -30,20 +25,9 @@ export function Footer() {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-col items-start gap-3 md:items-end">
-          <p className="text-sm text-ash">
-            Designed &amp; built by Marco A. Rodríguez
-          </p>
-          <button
-            type="button"
-            onClick={scrollTop}
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-paper"
-            aria-label="Back to top"
-          >
-            <ArrowUp className="h-4 w-4" aria-hidden />
-            Back to top
-          </button>
-        </div>
+        <p className="text-sm text-ash md:text-end">
+          Designed &amp; built by Marco A. Rodríguez
+        </p>
       </div>
     </footer>
   );

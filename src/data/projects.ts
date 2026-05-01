@@ -18,35 +18,35 @@ export type CaseStudy = ProjectListItem & {
 export const projectList: ProjectListItem[] = [
   {
     num: "01",
-    title: "Interact Studio",
-    client: "Venture Building",
-    yearRange: "2025–2026",
-    tags: ["Strategy", "Dev"],
-    slug: "interact-studio",
+    title: "Prevify",
+    client: "AI-assisted tax compliance and monitoring platform.",
+    yearRange: "—",
+    tags: ["Product", "AI"],
+    slug: "prevify",
   },
   {
     num: "02",
-    title: "Wizeline × Fortune 500",
-    client: "Confidential",
-    yearRange: "2022–2025",
-    tags: ["Product Design Lead"],
-    slug: "wizeline-product-lead",
+    title: "Itemz.GG",
+    client: "Peer-to-peer marketplace for virtual collectibles.",
+    yearRange: "—",
+    tags: ["Marketplace", "P2P"],
+    slug: "itemz-gg",
   },
   {
     num: "03",
-    title: "Butchershop MX",
-    client: "Design Thinking Projects",
-    yearRange: "2017–2019",
-    tags: ["UX/UI"],
-    slug: "butchershop-mx",
+    title: "Splattr",
+    client: "3D Reconstruction and measurement app.",
+    yearRange: "—",
+    tags: ["3D", "Product"],
+    slug: "splattr",
   },
   {
     num: "04",
-    title: "Side project",
-    client: "Personal",
-    yearRange: "TBD",
-    tags: ["Full Stack"],
-    slug: "side-project",
+    title: "Territorio Nacional",
+    client: "Interactive news website.",
+    yearRange: "—",
+    tags: ["Editorial", "Web"],
+    slug: "territorio-nacional",
   },
 ];
 
@@ -57,77 +57,77 @@ const placeholderGallery = (prefix: string): { src: string; alt: string }[] =>
   }));
 
 export const caseStudies: Record<string, CaseStudy> = {
-  "interact-studio": {
+  prevify: {
     ...projectList[0],
     challenge: [
-      "Venture building means validating hypotheses quickly without sacrificing experience quality. This case outlines the end-to-end approach: discovery, prototyping, and delivery with cross-functional teams.",
-      "Full narrative with imagery and process lives in GitBook; this is a structural summary you can replace when you export final content.",
+      "Prevify focuses on tax compliance and monitoring with AI-assisted workflows so teams can stay ahead of obligations without drowning in manual checks.",
+      "Replace this summary with your full narrative, flows, and imagery when you export final case content.",
     ],
     role: [
-      "Product strategy and user validation",
-      "Interaction design and high-fidelity prototypes",
-      "Coordination with engineering and stakeholders",
+      "Product and experience direction",
+      "Compliance UX and monitoring patterns",
+      "Collaboration with stakeholders and engineering",
     ],
     outcomes: [
-      { label: "Discovery", value: "Iterative sprints" },
-      { label: "Focus", value: "Hypothesis → build" },
-      { label: "Scope", value: "Venture building" },
+      { label: "Focus", value: "Compliance" },
+      { label: "Angle", value: "AI-assisted" },
+      { label: "Type", value: "Platform" },
     ],
-    gallery: placeholderGallery("Interact Studio"),
+    gallery: placeholderGallery("Prevify"),
   },
-  "wizeline-product-lead": {
+  "itemz-gg": {
     ...projectList[1],
     challenge: [
-      "Leading product design for Fortune 500 clients means scale, compliance, and speed. This case summarizes the Product Design Lead role on long-term staff augmentation and distributed teams.",
-      "Replace these paragraphs with narrative and visuals from GitBook or Dribbble when available.",
+      "Itemz.GG is a peer-to-peer marketplace built around trust, discovery, and smooth trading for virtual collectibles.",
+      "Placeholder until you bring in detailed screens, metrics, and process from your archive.",
     ],
     role: [
-      "Product Design Lead on long-term engagements",
-      "Design systems and experience QA",
-      "Mentorship and design–engineering alignment",
+      "Marketplace UX and IA",
+      "Listing, trading, and trust patterns",
+      "Cross-functional delivery",
     ],
     outcomes: [
-      { label: "Clients", value: "Fortune 500" },
-      { label: "Role", value: "Lead" },
-      { label: "Scope", value: "Multi-team" },
+      { label: "Model", value: "P2P" },
+      { label: "Domain", value: "Collectibles" },
+      { label: "Surface", value: "Marketplace" },
     ],
-    gallery: placeholderGallery("Wizeline"),
+    gallery: placeholderGallery("Itemz.GG"),
   },
-  "butchershop-mx": {
+  splattr: {
     ...projectList[2],
     challenge: [
-      "At Butchershop MX the focus was facilitating design thinking and UX/UI for innovation projects with local and international teams.",
-      "Placeholder until the full case study is brought in from your archive.",
+      "Splattr combines 3D reconstruction with measurement so users can capture and understand real-world geometry in-app.",
+      "Swap these paragraphs for depth studies, technical constraints, and final visuals when ready.",
     ],
     role: [
-      "UX/UI and design-thinking workshops",
-      "Prototyping and user testing",
-      "Collaboration with strategy and brand",
+      "Product UX for capture and measurement flows",
+      "Clarity around 3D interactions",
+      "Iteration with technical feasibility",
     ],
     outcomes: [
-      { label: "Focus", value: "Design thinking" },
-      { label: "Period", value: "2017–2019" },
-      { label: "Discipline", value: "UX/UI" },
+      { label: "Medium", value: "3D" },
+      { label: "Job", value: "Measure" },
+      { label: "Form", value: "App" },
     ],
-    gallery: placeholderGallery("Butchershop"),
+    gallery: placeholderGallery("Splattr"),
   },
-  "side-project": {
+  "territorio-nacional": {
     ...projectList[3],
     challenge: [
-      "Reserved for a personal or full-stack side project. Content will ship once scope is defined.",
-      "Meanwhile this block keeps the case-study structure for an easy migration from GitBook or new assets.",
+      "Territorio Nacional delivers news through an interactive web experience that prioritizes clarity, pacing, and reader engagement.",
+      "Extend this stub with editorial samples, interaction notes, and analytics when available.",
     ],
     role: [
-      "Ideation and technical stack",
-      "Design and implementation",
-      "Shipping and metrics",
+      "Editorial web UX",
+      "Interactive storytelling patterns",
+      "Design–engineering alignment",
     ],
     outcomes: [
-      { label: "Status", value: "TBD" },
-      { label: "Stack", value: "Full stack" },
-      { label: "Focus", value: "Product" },
+      { label: "Format", value: "News" },
+      { label: "Experience", value: "Interactive" },
+      { label: "Channel", value: "Web" },
     ],
-    gallery: placeholderGallery("Side project"),
+    gallery: placeholderGallery("Territorio Nacional"),
   },
 };
 
