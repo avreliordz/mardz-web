@@ -16,6 +16,16 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000).
 
+### Si el sitio se ve sin estilos y en consola hay 404 en `/_next/static/...`
+
+Suele ser caché o carpeta `.next` inconsistente (por ejemplo proyectos en `Desktop` con iCloud). Para el servidor (`Ctrl+C`) y ejecuta:
+
+```bash
+npm run dev:clean
+```
+
+Eso borra `.next` y arranca de nuevo. Opcional: recarga forzada en el navegador (vacía caché).
+
 ## Variables de entorno (contacto por correo)
 
 El formulario usa la API `/api/contact` con [Resend](https://resend.com).
