@@ -1,28 +1,15 @@
 import type { Metadata } from "next";
-import { DM_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/Providers";
 
-const instrumentSerif = Instrument_Serif({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-space-mono",
   display: "swap",
 });
 
@@ -54,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${instrumentSerif.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-body antialiased`}
+        className={`${spaceMono.variable} font-body antialiased`}
       >
         <Providers>
           <Nav />

@@ -20,9 +20,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### If the site still looks unstyled / 404 on `/_next/static/chunks/*.js`
 
-1. Stop all `next dev` processes (only one server on port 3000).
+1. Stop all `next dev` processes (only one server on port 3000). On macOS you can run `lsof -i :3000` and end duplicate Node processes if needed.
 2. Run `npm run dev` again (or `rm -rf .next && npm run dev`).
 3. Hard refresh the tab or try an incognito window (old HTML can reference missing chunks).
+
+### If the terminal shows `Cannot find module './682.js'` or `./vendor-chunks/...` under `.next/server`
+
+That is a **broken incremental dev build** (often when several saves or routes compile while `.next` is changing—sync tools on Desktop/iCloud make it worse). Stop the server, remove `.next`, and start once: `rm -rf .next && npm run dev`. Prefer working from a folder that is **not** cloud-synced for the repo if this keeps happening.
 
 ## Environment variables (contact email)
 

@@ -17,9 +17,9 @@
   --background: var(--color-black);
   --foreground: var(--color-white);
 
-  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-display: var(--font-space-mono), ui-monospace, monospace;
+  --font-body: var(--font-space-mono), ui-monospace, monospace;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 0.3s;
@@ -83,7 +83,7 @@
 
   .hero-title {
     font-family: var(--font-display);
-    font-weight: 300;
+    font-weight: 400;
     font-size: clamp(3.5rem, 8vw, 9rem);
     line-height: 0.95;
   }

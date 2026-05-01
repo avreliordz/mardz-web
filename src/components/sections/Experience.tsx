@@ -24,7 +24,7 @@ const entries = [
     org: "Wizeline Services",
     role: "Product Designer - (Senior Level to Lead Designer)",
     quote:
-      "I consider Wizeline my biggest professional leap since I collaborated with Fortune 500 companies and very promising, well-backed startups. I started as a Level II designer and by my 4th year I was leader, mentor and tutor at Wizeline Academy.",
+      "I collaborated with Fortune 500 companies and very promising, well-backed startups. I started as a Level II designer and by my 4th year I was leader, mentor and tutor at Wizeline Academy.",
   },
   {
     range: "2025–Present Day",
@@ -87,7 +87,7 @@ export function Experience() {
                   <p className="mt-2 text-sm font-medium leading-snug text-paper/90">
                     {e.role}
                   </p>
-                  <p className="mt-3 border-l border-graphite/40 pl-3 text-sm italic leading-relaxed text-fog">
+                  <p className="mt-3 text-sm leading-relaxed text-fog">
                     {e.quote}
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export function Experience() {
                 <p className="mt-1 text-sm font-medium leading-snug text-paper/90">
                   {e.role}
                 </p>
-                <p className="mt-3 border-l border-graphite/40 pl-3 text-sm italic leading-relaxed text-fog">
+                <p className="mt-3 text-sm leading-relaxed text-fog">
                   {e.quote}
                 </p>
               </div>
