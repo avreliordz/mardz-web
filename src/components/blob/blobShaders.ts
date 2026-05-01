@@ -62,14 +62,19 @@ uniform float uNoiseAmp;
 uniform float uHoverStrength;
 `;
 
-/** Injected after #include <begin_vertex> — displaces along radial direction */
+/** Injected after #include <begin_vertex> — soft, fluid displacement (low jag, round silhouette) */
 export const BLOB_VERTEX_DISPLACE_SNIPPET = /* glsl */ `
   vec3 dir = normalize(transformed);
-  float h = 1.0 + uHoverStrength * 0.65;
-  float t = uNoisePhase;
-  float n1 = snoise(dir * uNoiseFreq + vec3(t, t * 0.97, t * 1.03));
-  float n2 = snoise(dir * uNoiseFreq * 2.1 + vec3(t * 1.3, t * 1.1, t));
-  float disp = (n1 * uNoiseAmp + n2 * uNoiseAmp * 0.4) * h;
+  float h = 1.0 + uHoverStrength * 0.42;
+  float t = uNoisePhase * 0.92;
+  float f = uNoiseFreq * 0.82;
+  float n1 = snoise(dir * f + vec3(t * 0.9, t * 0.88, t * 0.95));
+  float n2 = snoise(dir * f * 1.55 + vec3(t * 1.05, t * 1.12, t * 0.98)) * 0.52;
+  float blend = clamp(n1 * 0.8 + n2 * 0.2, -1.0, 1.0);
+  float shaped = sign(blend) * pow(abs(blend), 0.72);
+  float roundBias = 1.0 - length(transformed) * 0.028;
+  roundBias = clamp(roundBias, 0.88, 1.0);
+  float disp = shaped * uNoiseAmp * h * roundBias * 0.95;
   transformed += dir * disp;
 `;
 

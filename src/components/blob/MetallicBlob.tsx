@@ -2,9 +2,10 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, type RootState, type ThreeEvent } from "@react-three/fiber";
-import { Environment, PerspectiveCamera } from "@react-three/drei";
+import { PerspectiveCamera } from "@react-three/drei";
 import { motion } from "framer-motion";
 import * as THREE from "three";
+import { BlobEnvironment } from "./blobEnvTexture";
 import { appendBlobNoiseAndDisplace } from "./blobShaders";
 import type { MetallicBlobProps } from "./blob.types";
 import { useBlobState } from "./useBlobState";
@@ -15,16 +16,16 @@ const DPR_CAP = 1.5;
 function createBlobMaterial() {
   const uniforms = {
     uNoisePhase: { value: 0 },
-    uNoiseFreq: { value: 1.2 },
-    uNoiseAmp: { value: 0.38 },
+    uNoiseFreq: { value: 0.72 },
+    uNoiseAmp: { value: 0.14 },
     uHoverStrength: { value: 0 },
   };
 
   const mat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(1, 1, 1),
     metalness: 1,
-    roughness: 0.05,
-    envMapIntensity: 2.5,
+    roughness: 0.08,
+    envMapIntensity: 2.15,
   });
 
   mat.userData.blobUniforms = uniforms;
@@ -100,7 +101,7 @@ function BlobScene({
     u.uHoverStrength.value = hoverSmoothedRef.current;
 
     material.roughness = roughness.current;
-    material.envMapIntensity = 2.5;
+    material.envMapIntensity = 2.15;
     const em = emissive.current;
     material.emissiveIntensity = em;
     if (em > 0.0001) {
@@ -113,7 +114,7 @@ function BlobScene({
     if (g) {
       const t = state.clock.elapsedTime;
       g.position.y = Math.sin(t * ((Math.PI * 2) / 3)) * 0.15;
-      g.rotation.y += 0.003;
+      g.rotation.y += 0.002;
       const s = scale.current;
       g.scale.setScalar(s);
     }
@@ -159,9 +160,7 @@ function BlobScene({
         intensity={0}
         color={new THREE.Color(1, 1, 1)}
       />
-      <Suspense fallback={null}>
-        <Environment preset="studio" />
-      </Suspense>
+      <BlobEnvironment />
       <group ref={groupRef}>
         <mesh
           geometry={geometry}

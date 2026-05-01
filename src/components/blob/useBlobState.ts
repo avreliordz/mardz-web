@@ -3,36 +3,37 @@
 import { useCallback, useRef } from "react";
 import type { BlobDiscreteState, BlobStateTargets } from "./blob.types";
 
+/** Tuned for smoother, rounder “suspended fluid” silhouette (lower amp/freq). */
 const STATE_TABLE: BlobStateTargets[] = [
   {
-    noiseFreq: 1.2,
-    noiseAmp: 0.38,
-    speed: 0.4,
-    roughness: 0.05,
+    noiseFreq: 0.72,
+    noiseAmp: 0.14,
+    speed: 0.32,
+    roughness: 0.08,
     scale: 1,
     emissiveMax: 0,
   },
   {
-    noiseFreq: 3.8,
-    noiseAmp: 0.55,
-    speed: 1.1,
-    roughness: 0.25,
+    noiseFreq: 1.85,
+    noiseAmp: 0.2,
+    speed: 0.85,
+    roughness: 0.22,
     scale: 1,
     emissiveMax: 0,
   },
   {
-    noiseFreq: 0.6,
-    noiseAmp: 0.72,
-    speed: 0.2,
-    roughness: 0.05,
-    scale: 1.15,
+    noiseFreq: 0.42,
+    noiseAmp: 0.26,
+    speed: 0.16,
+    roughness: 0.08,
+    scale: 1.12,
     emissiveMax: 0,
   },
   {
-    noiseFreq: 5.5,
-    noiseAmp: 0.28,
-    speed: 2.2,
-    roughness: 0.05,
+    noiseFreq: 2.75,
+    noiseAmp: 0.13,
+    speed: 1.65,
+    roughness: 0.08,
     scale: 1,
     emissiveMax: 0.08,
   },
@@ -64,8 +65,8 @@ export function useBlobState(
   const computeTargets = useCallback((): BlobStateTargets => {
     const s = STATE_TABLE[stateRef.current];
     const h = hoverSmoothedRef.current;
-    const freqMul = 1 + 0.45 * h;
-    const ampMul = 1 + 0.35 * h;
+    const freqMul = 1 + 0.28 * h;
+    const ampMul = 1 + 0.22 * h;
     return {
       noiseFreq: s.noiseFreq * freqMul,
       noiseAmp: s.noiseAmp * ampMul,
