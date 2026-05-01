@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import MetallicBlob from "@/components/blob/MetallicBlob";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { Marquee } from "@/components/ui/Marquee";
 import { motionDuration, motionEasing } from "@/lib/utils";
@@ -20,7 +21,9 @@ export function Hero() {
       className="relative min-h-screen bg-black pt-28"
       aria-labelledby="hero-heading"
     >
-      <div className="mx-auto flex max-w-[1400px] flex-col px-5 md:px-8">
+      <MetallicBlob className="min-h-screen" />
+
+      <div className="pointer-events-none relative z-10 mx-auto flex max-w-[1400px] flex-col px-5 md:px-8">
         <div className="flex flex-col justify-between gap-4 pb-6 text-xs uppercase tracking-[0.2em] text-ash md:flex-row md:items-center">
           <span className="font-mono">Based in Monterrey, MX</span>
           <span className="font-mono text-right md:text-left">
@@ -54,7 +57,7 @@ export function Hero() {
             </ul>
             <a
               href="#work"
-              className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-smoke"
+              className="group pointer-events-auto inline-flex w-max items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-smoke"
               data-cursor-hover
             >
               Scroll to explore
@@ -64,7 +67,9 @@ export function Hero() {
         </div>
       </div>
 
-      <Marquee items={clients} />
+      <div className="relative z-10">
+        <Marquee items={clients} />
+      </div>
     </section>
   );
 }

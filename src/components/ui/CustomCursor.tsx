@@ -14,6 +14,7 @@ export function CustomCursor() {
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [lightBg, setLightBg] = useState(false);
+  const [overBlobHero, setOverBlobHero] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, spring);
@@ -28,6 +29,8 @@ export function CustomCursor() {
       x.set(e.clientX);
       y.set(e.clientY);
       setVisible(true);
+      const t = e.target as HTMLElement | null;
+      setOverBlobHero(!!t?.closest("[data-blob-hero]"));
     };
 
     const leave = () => setVisible(false);
@@ -41,6 +44,7 @@ export function CustomCursor() {
       setHovering(!!interactive);
       const onPaper = t.closest("[data-cursor-light]");
       setLightBg(!!onPaper);
+      setOverBlobHero(!!t.closest("[data-blob-hero]"));
     };
 
     window.addEventListener("mousemove", move);
@@ -66,7 +70,7 @@ export function CustomCursor() {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !overBlobHero && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
           initial={{ opacity: 0 }}

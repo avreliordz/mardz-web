@@ -130,4 +130,26 @@
       cursor: none;
     }
   }
+
+  @keyframes blob-ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0.4;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(3);
+      opacity: 0;
+    }
+  }
+
+  .animate-blob-ripple {
+    animation: blob-ripple 600ms ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-blob-ripple {
+      animation: none;
+      opacity: 0;
+    }
+  }
 }
