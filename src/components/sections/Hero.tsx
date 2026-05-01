@@ -1,0 +1,70 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { TextReveal } from "@/components/ui/TextReveal";
+import { Marquee } from "@/components/ui/Marquee";
+import { motionDuration, motionEasing } from "@/lib/utils";
+
+const clients = [
+  "Puma",
+  "Adidas",
+  "News Corp",
+  "Globe and Mail",
+  "Wizeline",
+];
+
+export function Hero() {
+  return (
+    <section
+      className="relative min-h-screen bg-black pt-28"
+      aria-labelledby="hero-heading"
+    >
+      <div className="mx-auto flex max-w-[1400px] flex-col px-5 md:px-8">
+        <div className="flex flex-col justify-between gap-4 pb-6 text-xs uppercase tracking-[0.2em] text-ash md:flex-row md:items-center">
+          <span className="font-mono">Based in Monterrey, MX</span>
+          <span className="font-mono text-right md:text-left">
+            Product Developer + Interaction Designer
+          </span>
+        </div>
+
+        <div className="grid flex-1 gap-12 py-10 md:min-h-[70vh] md:grid-cols-[1fr_280px] md:items-end md:py-16">
+          <div id="hero-heading">
+            <TextReveal
+              lines={["End-to-End", "Product", "Developer."]}
+              italicIndices={[1]}
+              delayStart={0.15}
+            />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.85,
+              duration: motionDuration.base,
+              ease: motionEasing,
+            }}
+            className="flex flex-col gap-6 border-t border-graphite/40 pt-8 md:border-t-0 md:pt-0"
+          >
+            <ul className="space-y-3 font-mono text-sm text-fog">
+              <li>— 10+ años de experiencia</li>
+              <li>— Startups → Fortune 500</li>
+              <li>— Design × Code</li>
+            </ul>
+            <a
+              href="#work"
+              className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-smoke"
+              data-cursor-hover
+            >
+              Scroll to explore
+              <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+            </a>
+          </motion.div>
+        </div>
+      </div>
+
+      <Marquee items={clients} />
+    </section>
+  );
+}

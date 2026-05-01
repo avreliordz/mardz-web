@@ -1,0 +1,36 @@
+"use client";
+
+import { ProjectRow } from "@/components/ui/ProjectRow";
+import { projectList } from "@/data/projects";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+
+export function Work() {
+  return (
+    <section
+      id="work"
+      className="bg-black px-5 py-24 md:px-8"
+      aria-labelledby="work-heading"
+    >
+      <div className="mx-auto max-w-[1400px]">
+        <ScrollReveal>
+          <p className="font-mono-label text-smoke">§ 03</p>
+          <h2
+            id="work-heading"
+            className="section-title mt-4 text-paper"
+          >
+            Featured work
+          </h2>
+          <p className="mt-4 max-w-xl text-fog">
+            Selección de proyectos — estrategia, diseño y construcción.
+          </p>
+        </ScrollReveal>
+
+        <div className="mt-16">
+          {projectList.map((p, i) => (
+            <ProjectRow key={p.slug} project={p} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

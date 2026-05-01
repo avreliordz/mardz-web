@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MARDZ — Portfolio web
 
-## Getting Started
+Sitio de portafolio personal (Next.js 14, App Router, TypeScript, Tailwind CSS, Framer Motion), según el PRD del repositorio. Dominio previsto: [marcoaurelio.mx](https://marcoaurelio.mx).
 
-First, run the development server:
+## Requisitos
+
+- Node.js 18+
+- npm (o pnpm/yarn)
+
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables de entorno (contacto por correo)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El formulario usa la API `/api/contact` con [Resend](https://resend.com).
 
-## Learn More
+1. Copia `.env.example` a `.env.local`.
+2. Configura:
 
-To learn more about Next.js, take a look at the following resources:
+- `RESEND_API_KEY` — API key de Resend.
+- `CONTACT_TO_EMAIL` — correo donde recibes los mensajes.
+- `CONTACT_FROM` — remitente verificado en Resend (p. ej. `Portfolio <onboarding@resend.dev>` en pruebas).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Sin estas variables, la API responde 503 y el cliente muestra un mensaje para configurar el servicio o usar el fallback.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Fallback sin backend: Formspree
 
-## Deploy on Vercel
+1. Crea un formulario en [Formspree](https://formspree.io).
+2. Opción A: en `src/components/sections/Contact.tsx`, sustituye el `fetch` por un `action` apuntando a la URL del formulario.
+3. Opción B: enlaza un botón “Contactar” a esa URL desde el CTA.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Despliegue en Vercel vía GitHub
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Sube el código a un repositorio en GitHub (si aún no existe):
+
+   ```bash
+   git add .
+   git commit -m "Initial portfolio site"
+   git branch -M main
+   git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
+   git push -u origin main
+   ```
+
+2. En [Vercel](https://vercel.com): **Add New Project** → Import el repo de GitHub.
+3. Framework: Next.js (detectado automáticamente). Variables de entorno: añade `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM` en **Settings → Environment Variables** (Production / Preview según necesites).
+4. **Dominio personalizado**: en el proyecto → **Settings → Domains** → añade `marcoaurelio.mx` y los registros DNS que indique tu proveedor (A/AAAA o CNAME hacia Vercel).
+
+## Scripts
+
+| Comando        | Descripción              |
+| -------------- | ------------------------ |
+| `npm run dev`  | Servidor de desarrollo   |
+| `npm run build` | Build de producción    |
+| `npm run start` | Servidor tras `build`  |
+| `npm run lint`  | ESLint                   |
+
+## Estructura principal
+
+- `src/app/` — rutas (`/`, `/work/[slug]`, `/api/contact`, `sitemap.ts`).
+- `src/components/` — layout, secciones y UI.
+- `src/data/` — proyectos, capacidades, speaking.
+- `src/styles/globals.css` — tokens de diseño (paleta monocromática, tipografía).
+- `public/og-image.jpg` — imagen Open Graph (sustituible).
+
+## Documentación
+
+Especificación de producto: [PORTFOLIO-PRD.md](./PORTFOLIO-PRD.md).

@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-black: #0a0a0a;
+  --color-ink: #111111;
+  --color-carbon: #1c1c1c;
+  --color-graphite: #2e2e2e;
+  --color-ash: #6b6b6b;
+  --color-smoke: #a8a8a8;
+  --color-fog: #d4d4d4;
+  --color-paper: #f5f4f0;
+  --color-white: #fafafa;
+  --color-accent: #ffffff;
+
+  --background: var(--color-black);
+  --foreground: var(--color-white);
+
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 0.3s;
+  --duration-base: 0.5s;
+  --duration-slow: 0.9s;
+  --duration-crawl: 1.4s;
+  --stagger: 0.08s;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-black text-fog antialiased;
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background-color: rgba(250, 250, 250, 0.2);
+    color: var(--color-white);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .font-mono-label {
+    font-family: var(--font-mono);
+    @apply text-[0.7rem] uppercase tracking-[0.15em];
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3.5rem, 8vw, 9rem);
+    line-height: 0.95;
+  }
+
+  .hero-title--italic {
+    font-style: italic;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    line-height: 1.05;
+  }
+
+  .sub-title {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    letter-spacing: 0.02em;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 45s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+      animation: none;
+    }
+  }
+
+  @media (pointer: fine) {
+    html.has-custom-cursor body {
+      cursor: none;
+    }
+  }
+}
