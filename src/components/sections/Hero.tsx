@@ -13,6 +13,16 @@ const clients = [
   "News Corp",
   "Globe and Mail",
   "Wizeline",
+  "Rappi",
+  "Value",
+  "Prevify",
+  "Prevenco",
+  "Dow Jones",
+  "Tec de Monterrey",
+  "Binance",
+  "Bimbo",
+  "Oxxo",
+  "Merco",
 ];
 
 export function Hero() {

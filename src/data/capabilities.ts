@@ -25,9 +25,9 @@ export const capabilities: Capability[] = [
   },
   {
     id: "04",
-    title: "Frontend Development",
+    title: "Full-stack Development",
     description:
-      "React, Next.js, Tailwind — accessible, performant interfaces.",
+      "I started as a front-end developer in my early professional days, now I develop assisted with AI models such as Opus and Composer on Cursor.",
   },
   {
     id: "05",

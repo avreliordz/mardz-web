@@ -39,10 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${spaceMono.variable} font-body antialiased`}
-      >
+    <html lang="en" className={spaceMono.variable}>
+      <body className="font-body antialiased">
         <Providers>
           <Nav />
           <main>{children}</main>

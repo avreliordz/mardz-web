@@ -39,6 +39,10 @@
     font-family: var(--font-body);
   }
 
+  img[src$=".gif"] {
+    background-color: #000;
+  }
+
   ::selection {
     background-color: rgba(250, 250, 250, 0.2);
     color: var(--color-white);

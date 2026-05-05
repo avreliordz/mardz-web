@@ -13,20 +13,30 @@ export function About() {
       <div className="mx-auto max-w-[1400px]">
         <p className="font-mono-label text-ash">§ 02</p>
 
-        <div className="mt-12 grid gap-16 md:grid-cols-[1.2fr_1fr]">
+        <h2
+          id="about-heading"
+          className="section-title mt-12 mb-8 max-w-2xl text-balance text-ink md:mb-10"
+        >
+          About me
+        </h2>
+
+        <div className="grid gap-16 md:grid-cols-[1.2fr_1fr]">
           <ScrollReveal>
-            <h2
-              id="about-heading"
-              className="section-title mb-8 max-w-2xl text-balance text-ink md:mb-10"
-            >
-              I develop and deliver your business end-to-end
-            </h2>
-            <p className="max-w-2xl text-base leading-relaxed text-ink/90 md:text-lg">
-              My path started in digital arts and evolved toward scalable
-              solutions. I&apos;ve worked with VC-backed startups and Fortune
-              500 companies such as Puma, Adidas, and News Corp—always bridging
-              design and engineering.
-            </p>
+            <div className="max-w-2xl space-y-4 text-base leading-relaxed text-ink/90 md:text-lg">
+              <p>
+                My path started as a Digital Arts Bachelor with a strong
+                interest towards human-computer interaction. Therefore I
+                specialized in User Research and Product Design allowing me to
+                work for a couple of well-known companies as a consultant for
+                VC-backed startups and Fortune 500 companies such as Puma,
+                Adidas, and News Corp—always bridging design and engineering.
+              </p>
+              <p>
+                Today, I develop end-to-end innovative, accessible, and scalable
+                business models as an independent professional for innovation
+                firms and startup entrepreneurs.
+              </p>
+            </div>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>

@@ -64,18 +64,25 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
         </div>
 
         <AnimatePresence>
-          {hover && (
+          {hover && project.previewGif && (
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 16 }}
               transition={{ duration: motionDuration.fast, ease: motionEasing }}
-              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(100%,420px)] items-center border-l border-graphite/50 bg-black/40 px-6 py-6 backdrop-blur-sm md:flex"
+              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(100%,420px)] overflow-hidden border-l border-graphite/50 bg-[#000] md:block"
             >
-              <p className="text-left text-sm leading-relaxed text-fog">
-                Open the case: role, process, and outcomes for{" "}
-                <span className="text-paper">{project.title}</span>.
-              </p>
+              {/* Animated GIF playback */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.previewGif}
+                alt=""
+                className="absolute inset-0 h-full w-full bg-[#000] object-cover object-center"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-l from-black/65 via-black/15 to-transparent"
+                aria-hidden
+              />
             </motion.div>
           )}
         </AnimatePresence>
