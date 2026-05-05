@@ -29,12 +29,14 @@ export function About() {
                 specialized in User Research and Product Design allowing me to
                 work for a couple of well-known companies as a consultant for
                 VC-backed startups and Fortune 500 companies such as Puma,
-                Adidas, and News Corp—always bridging design and engineering.
+                Adidas, and News Corp—always bridging the gap between design and
+                engineering.
               </p>
               <p>
                 Today, I develop end-to-end innovative, accessible, and scalable
-                business models as an independent professional for innovation
-                firms and startup entrepreneurs.
+                businesses through digital products as an independent
+                professional for innovation firms and startup entrepreneurs
+                across many different industries.
               </p>
             </div>
           </ScrollReveal>
