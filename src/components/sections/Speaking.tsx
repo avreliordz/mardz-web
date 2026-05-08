@@ -14,7 +14,7 @@ export function Speaking() {
         <ScrollReveal>
           <p className="font-mono-label text-smoke">§ 06</p>
           <h2 id="speaking-heading" className="section-title mt-4 text-paper">
-            Speaking &amp; community
+            Speaker @
           </h2>
         </ScrollReveal>
 
