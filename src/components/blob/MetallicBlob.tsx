@@ -37,7 +37,7 @@ function createBlobUniforms(): BlobUniforms {
 }
 
 function attachBlobShaders(
-  mat: THREE.MeshStandardMaterial,
+  mat: THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial,
   uniforms: BlobUniforms,
   opts?: { surfaceGrain?: boolean },
 ) {
@@ -56,11 +56,22 @@ function attachBlobShaders(
 }
 
 function createMainBlobMaterial(uniforms: BlobUniforms) {
-  const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(1, 1, 1),
-    metalness: 1,
-    roughness: 0.08,
-    envMapIntensity: 2.15,
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color(0.88, 0.94, 0.99),
+    metalness: 0.04,
+    roughness: 0.055,
+    transmission: 0.89,
+    thickness: 0.95,
+    ior: 1.54,
+    transparent: true,
+    opacity: 1,
+    envMapIntensity: 2.35,
+    attenuationColor: new THREE.Color(0.82, 0.92, 1),
+    attenuationDistance: 1.05,
+    clearcoat: 0.38,
+    clearcoatRoughness: 0.09,
+    specularIntensity: 1,
+    specularColor: new THREE.Color(1, 1, 1),
   });
   attachBlobShaders(mat, uniforms, { surfaceGrain: true });
   return mat;
@@ -85,20 +96,12 @@ function createWireframeOverlayMaterial(uniforms: BlobUniforms) {
 
 type SceneProps = {
   detail: number;
-  initialState: NonNullable<MetallicBlobProps["initialState"]>;
-  onStateChange?: MetallicBlobProps["onStateChange"];
   onRipple: (clientX: number, clientY: number) => void;
 };
 
-function BlobScene({
-  detail,
-  initialState,
-  onStateChange,
-  onRipple,
-}: SceneProps) {
+function BlobScene({ detail, onRipple }: SceneProps) {
   const {
     advance,
-    cycleState,
     pointerHandlers,
     applyClickImpulse,
     clickKick,
@@ -108,8 +111,7 @@ function BlobScene({
     noiseAmp,
     roughness,
     scale,
-    emissive,
-  } = useBlobState(initialState, onStateChange);
+  } = useBlobState();
   const [extraWireShell, setExtraWireShell] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
@@ -161,15 +163,8 @@ function BlobScene({
     u.uHoverStrength.value = hoverSmoothedRef.current;
     u.uClickKick.value = clickKick.current;
 
-    material.roughness = roughness.current;
-    material.envMapIntensity = 2.68;
-    const em = emissive.current;
-    material.emissiveIntensity = em;
-    if (em > 0.0001) {
-      material.emissive.setRGB(1, 1, 1);
-    } else {
-      material.emissive.setRGB(0, 0, 0);
-    }
+    material.roughness = Math.min(0.18, 0.028 + roughness.current * 0.55);
+    material.envMapIntensity = 2.55;
 
     const g = groupRef.current;
     if (g) {
@@ -186,11 +181,10 @@ function BlobScene({
       e.stopPropagation();
       setExtraWireShell(true);
       applyClickImpulse();
-      cycleState();
       const ev = e.nativeEvent;
       onRipple(ev.clientX, ev.clientY);
     },
-    [applyClickImpulse, cycleState, onRipple],
+    [applyClickImpulse, onRipple],
   );
 
   return (
@@ -231,8 +225,6 @@ function BlobScene({
 
 export default function MetallicBlob({
   className,
-  initialState = 0,
-  onStateChange,
   icosahedronDetail = 5,
 }: MetallicBlobProps) {
   const [mounted, setMounted] = useState(false);
@@ -304,12 +296,7 @@ export default function MetallicBlob({
             }}
             onCreated={handleGlCreated}
           >
-            <BlobScene
-              detail={icosahedronDetail}
-              initialState={initialState}
-              onStateChange={onStateChange}
-              onRipple={addRipple}
-            />
+            <BlobScene detail={icosahedronDetail} onRipple={addRipple} />
           </Canvas>
         </Suspense>
       </div>

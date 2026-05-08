@@ -1,5 +1,3 @@
-export type BlobDiscreteState = 0 | 1 | 2;
-
 export interface BlobStateTargets {
   noiseFreq: number;
   noiseAmp: number;
@@ -11,8 +9,6 @@ export interface BlobStateTargets {
 
 export interface MetallicBlobProps {
   className?: string;
-  initialState?: BlobDiscreteState;
-  onStateChange?: (state: number) => void;
   /** Icosahedron subdivision detail (default 5 for broad browser support) */
   icosahedronDetail?: number;
 }
