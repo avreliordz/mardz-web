@@ -1,20 +1,30 @@
 "use client";
 
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const spring = { damping: 28, stiffness: 400, mass: 0.15 };
+
+function hitTest(clientX: number, clientY: number) {
+  const el = document.elementFromPoint(clientX, clientY);
+  if (!el) {
+    return { overBlobHero: false, hovering: false, lightBg: false };
+  }
+  return {
+    overBlobHero: !!el.closest("[data-blob-hero]"),
+    hovering: !!el.closest(
+      "a, button, [role='button'], input, textarea, [data-cursor-hover]",
+    ),
+    lightBg: !!el.closest("[data-cursor-light]"),
+  };
+}
 
 export function CustomCursor() {
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [lightBg, setLightBg] = useState(false);
   const [overBlobHero, setOverBlobHero] = useState(false);
+  const [pressed, setPressed] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, spring);
@@ -25,36 +35,38 @@ export function CustomCursor() {
     const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!mqFine.matches || mqReduce.matches) return;
 
-    const move = (e: MouseEvent) => {
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
       x.set(e.clientX);
       y.set(e.clientY);
       setVisible(true);
-      const t = e.target as HTMLElement | null;
-      setOverBlobHero(!!t?.closest("[data-blob-hero]"));
+      const hit = hitTest(e.clientX, e.clientY);
+      setOverBlobHero(hit.overBlobHero);
+      setHovering(hit.hovering);
+      setLightBg(hit.lightBg);
     };
 
-    const leave = () => setVisible(false);
+    const hide = () => setVisible(false);
 
-    const onOver = (e: MouseEvent) => {
-      const t = e.target as HTMLElement | null;
-      if (!t) return;
-      const interactive = t.closest(
-        "a, button, [role='button'], input, textarea, [data-cursor-hover]",
-      );
-      setHovering(!!interactive);
-      const onPaper = t.closest("[data-cursor-light]");
-      setLightBg(!!onPaper);
-      setOverBlobHero(!!t.closest("[data-blob-hero]"));
+    const down = (e: PointerEvent) => {
+      if (e.pointerType === "mouse" && e.button === 0) setPressed(true);
+    };
+    const up = (e: PointerEvent) => {
+      if (e.pointerType === "mouse" && e.button === 0) setPressed(false);
     };
 
-    window.addEventListener("mousemove", move);
-    window.addEventListener("mouseleave", leave);
-    document.addEventListener("mouseover", onOver);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", down);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    window.addEventListener("blur", hide);
 
     return () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mouseleave", leave);
-      document.removeEventListener("mouseover", onOver);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+      window.removeEventListener("blur", hide);
     };
   }, [x, y]);
 
@@ -68,31 +80,33 @@ export function CustomCursor() {
     };
   }, []);
 
+  const base = hovering ? 48 : overBlobHero ? 14 : 12;
+  const dim = Math.min(base + (pressed ? 4 : 0), 52);
+  const bg = lightBg ? "rgba(10,10,10,0.85)" : "rgba(255,255,255,0.9)";
+  const borderCol = lightBg ? "rgba(10,10,10,0.4)" : "rgba(255,255,255,0.5)";
+
   return (
-    <AnimatePresence>
-      {visible && !overBlobHero && (
-        <motion.div
-          className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          aria-hidden
-        >
-          <motion.div
-            className="-translate-x-1/2 -translate-y-1/2 rounded-full border border-white/40"
-            style={{ x: sx, y: sy }}
-            animate={{
-              width: hovering ? 48 : 12,
-              height: hovering ? 48 : 12,
-              backgroundColor: lightBg
-                ? "rgba(10,10,10,0.85)"
-                : "rgba(255,255,255,0.9)",
-              borderColor: lightBg ? "rgba(10,10,10,0.4)" : "rgba(255,255,255,0.5)",
-            }}
-            transition={{ type: "spring", ...spring }}
-          />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.12, ease: "easeOut" }}
+      aria-hidden
+    >
+      <motion.div
+        className="-translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          x: sx,
+          y: sy,
+          width: dim,
+          height: dim,
+          backgroundColor: bg,
+          border: `1px solid ${borderCol}`,
+          transitionProperty: "width, height, background-color, border-color",
+          transitionDuration: "0.16s",
+          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      />
+    </motion.div>
   );
 }
