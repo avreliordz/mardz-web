@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import {
   Canvas,
   useFrame,
+  useThree,
   type RootState,
   type ThreeEvent,
 } from "@react-three/fiber";
@@ -17,6 +18,11 @@ import { useBlobState } from "./useBlobState";
 import { cn } from "@/lib/utils";
 
 const DPR_CAP = 1.5;
+
+const DRAG_ROT_Y = 0.0052;
+const DRAG_PINCH = 0.00165;
+const TAP_THRESH_PX = 7;
+const PINCH_LIMIT = 0.15;
 
 type BlobUniforms = {
   uNoisePhase: { value: number };
@@ -100,6 +106,7 @@ type SceneProps = {
 };
 
 function BlobScene({ detail, onRipple }: SceneProps) {
+  const { gl } = useThree();
   const {
     advance,
     pointerHandlers,
@@ -117,6 +124,9 @@ function BlobScene({ detail, onRipple }: SceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const wireMeshRef = useRef<THREE.Mesh>(null);
   const wireMeshOuterRef = useRef<THREE.Mesh>(null);
+  const draggingRef = useRef(false);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const pinchOffsetRef = useRef(0);
 
   const blobUniforms = useMemo(() => createBlobUniforms(), []);
   const material = useMemo(
@@ -170,21 +180,74 @@ function BlobScene({ detail, onRipple }: SceneProps) {
     if (g) {
       const t = state.clock.elapsedTime;
       g.position.y = Math.sin(t * ((Math.PI * 2) / 3)) * 0.15;
-      g.rotation.y += 0.002;
-      const s = scale.current;
+      if (!draggingRef.current) {
+        g.rotation.y += 0.002;
+      }
+      const s = scale.current * (1 + pinchOffsetRef.current);
       g.scale.setScalar(s);
     }
   });
 
-  const handleClick = useCallback(
-    (e: ThreeEvent<MouseEvent>) => {
-      e.stopPropagation();
-      setExtraWireShell(true);
-      applyClickImpulse();
-      const ev = e.nativeEvent;
-      onRipple(ev.clientX, ev.clientY);
+  const endDragSession = useCallback(
+    (ev: PointerEvent, clientX: number, clientY: number) => {
+      const el = gl.domElement;
+      try {
+        el.releasePointerCapture(ev.pointerId);
+      } catch {
+        /* not captured */
+      }
+      draggingRef.current = false;
+
+      const start = dragStartRef.current;
+      dragStartRef.current = null;
+      if (!start) return;
+      const dx = clientX - start.x;
+      const dy = clientY - start.y;
+      if (dx * dx + dy * dy < TAP_THRESH_PX * TAP_THRESH_PX) {
+        setExtraWireShell(true);
+        applyClickImpulse();
+        onRipple(clientX, clientY);
+      }
     },
-    [applyClickImpulse, onRipple],
+    [applyClickImpulse, gl, onRipple],
+  );
+
+  const handlePointerDown = useCallback(
+    (e: ThreeEvent<PointerEvent>) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.stopPropagation();
+      draggingRef.current = true;
+      dragStartRef.current = { x: e.clientX, y: e.clientY };
+
+      const el = gl.domElement;
+      const pid = e.pointerId;
+
+      const onMove = (ev: PointerEvent) => {
+        if (ev.pointerId !== pid) return;
+        const g = groupRef.current;
+        if (!g) return;
+        g.rotation.y += ev.movementX * DRAG_ROT_Y;
+        pinchOffsetRef.current = THREE.MathUtils.clamp(
+          pinchOffsetRef.current - ev.movementY * DRAG_PINCH,
+          -PINCH_LIMIT,
+          PINCH_LIMIT,
+        );
+      };
+
+      const onUpOrCancel = (ev: PointerEvent) => {
+        if (ev.pointerId !== pid) return;
+        el.removeEventListener("pointermove", onMove);
+        el.removeEventListener("pointerup", onUpOrCancel);
+        el.removeEventListener("pointercancel", onUpOrCancel);
+        endDragSession(ev, ev.clientX, ev.clientY);
+      };
+
+      el.addEventListener("pointermove", onMove);
+      el.addEventListener("pointerup", onUpOrCancel);
+      el.addEventListener("pointercancel", onUpOrCancel);
+      el.setPointerCapture(pid);
+    },
+    [endDragSession, gl],
   );
 
   return (
@@ -196,7 +259,7 @@ function BlobScene({ detail, onRipple }: SceneProps) {
           ref={meshRef}
           geometry={geometry}
           material={material}
-          onClick={handleClick}
+          onPointerDown={handlePointerDown}
           onPointerEnter={() => {
             pointerHandlers.onPointerEnter();
           }}
