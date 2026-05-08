@@ -61,6 +61,12 @@ export function useBlobState(
   const emissive = useRef(0);
   const noisePhase = useRef(0);
   const strobePhase = useRef(0);
+  const clickKick = useRef(0);
+
+  const applyClickImpulse = useCallback(() => {
+    clickKick.current = Math.min(clickKick.current + 0.92, 1);
+    noisePhase.current += 2.85;
+  }, []);
 
   const computeTargets = useCallback((): BlobStateTargets => {
     const s = STATE_TABLE[stateRef.current];
@@ -91,7 +97,8 @@ export function useBlobState(
     roughness.current = easeToward(roughness.current, t.roughness, dt, tauMorph);
     scale.current = easeToward(scale.current, t.scale, dt, tauMorph);
 
-    noisePhase.current += dt * speed.current;
+    noisePhase.current += dt * speed.current * (1.0 + clickKick.current * 0.95);
+    clickKick.current *= Math.exp(-dt * 2.15);
 
     const emMax = t.emissiveMax;
     if (stateRef.current === 3) {
@@ -131,6 +138,8 @@ export function useBlobState(
     advance,
     cycleState,
     pointerHandlers,
+    applyClickImpulse,
+    clickKick,
     noiseFreq,
     noiseAmp,
     speed,

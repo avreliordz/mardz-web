@@ -4,7 +4,6 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import {
   Canvas,
   useFrame,
-  useThree,
   type RootState,
   type ThreeEvent,
 } from "@react-three/fiber";
@@ -12,25 +11,19 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { BlobEnvironment } from "./blobEnvTexture";
-import { appendBlobNoiseAndDisplace } from "./blobShaders";
+import { appendBlobNoiseAndDisplace, appendBlobSurfaceGrain } from "./blobShaders";
 import type { MetallicBlobProps } from "./blob.types";
 import { useBlobState } from "./useBlobState";
 import { cn } from "@/lib/utils";
 
 const DPR_CAP = 1.5;
 
-/** W × √(2), height × √(2), depth × √(2) → direction ~45° azimuth & ~45° elevation from −Z “behind” axis */
-const BACKLIGHT_POS = new THREE.Vector3(-5, 5, -5);
-
-/** Sparse cursor rim — tight falloff, low peak intensity */
-const CURSOR_LIGHT_PEAK = 0.72;
-const CURSOR_LIGHT_DISTANCE = 5.5;
-
 type BlobUniforms = {
   uNoisePhase: { value: number };
   uNoiseFreq: { value: number };
   uNoiseAmp: { value: number };
   uHoverStrength: { value: number };
+  uClickKick: { value: number };
 };
 
 function createBlobUniforms(): BlobUniforms {
@@ -39,17 +32,26 @@ function createBlobUniforms(): BlobUniforms {
     uNoiseFreq: { value: 0.72 },
     uNoiseAmp: { value: 0.14 },
     uHoverStrength: { value: 0 },
+    uClickKick: { value: 0 },
   };
 }
 
-function attachBlobVertexShader(mat: THREE.MeshStandardMaterial, uniforms: BlobUniforms) {
+function attachBlobShaders(
+  mat: THREE.MeshStandardMaterial,
+  uniforms: BlobUniforms,
+  opts?: { surfaceGrain?: boolean },
+) {
   mat.userData.blobUniforms = uniforms;
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.uNoisePhase = uniforms.uNoisePhase;
     shader.uniforms.uNoiseFreq = uniforms.uNoiseFreq;
     shader.uniforms.uNoiseAmp = uniforms.uNoiseAmp;
     shader.uniforms.uHoverStrength = uniforms.uHoverStrength;
+    shader.uniforms.uClickKick = uniforms.uClickKick;
     shader.vertexShader = appendBlobNoiseAndDisplace(shader.vertexShader);
+    if (opts?.surfaceGrain) {
+      shader.fragmentShader = `uniform float uNoisePhase;\n${appendBlobSurfaceGrain(shader.fragmentShader)}`;
+    }
   };
 }
 
@@ -60,7 +62,7 @@ function createMainBlobMaterial(uniforms: BlobUniforms) {
     roughness: 0.08,
     envMapIntensity: 2.15,
   });
-  attachBlobVertexShader(mat, uniforms);
+  attachBlobShaders(mat, uniforms, { surfaceGrain: true });
   return mat;
 }
 
@@ -77,7 +79,7 @@ function createWireframeOverlayMaterial(uniforms: BlobUniforms) {
     transparent: true,
     opacity: 0.72,
   });
-  attachBlobVertexShader(mat, uniforms);
+  attachBlobShaders(mat, uniforms);
   return mat;
 }
 
@@ -86,8 +88,6 @@ type SceneProps = {
   initialState: NonNullable<MetallicBlobProps["initialState"]>;
   onStateChange?: MetallicBlobProps["onStateChange"];
   onRipple: (clientX: number, clientY: number) => void;
-  onHoverChange: (hovering: boolean) => void;
-  onGlowMove: (clientX: number, clientY: number) => void;
 };
 
 function BlobScene({
@@ -95,13 +95,13 @@ function BlobScene({
   initialState,
   onStateChange,
   onRipple,
-  onHoverChange,
-  onGlowMove,
 }: SceneProps) {
   const {
     advance,
     cycleState,
     pointerHandlers,
+    applyClickImpulse,
+    clickKick,
     hoverSmoothedRef,
     noisePhase,
     noiseFreq,
@@ -110,16 +110,11 @@ function BlobScene({
     scale,
     emissive,
   } = useBlobState(initialState, onStateChange);
-  const { camera } = useThree();
-  const [wireframeActive, setWireframeActive] = useState(false);
+  const [extraWireShell, setExtraWireShell] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const wireMeshRef = useRef<THREE.Mesh>(null);
-  const cursorLightRef = useRef<THREE.PointLight>(null);
-  /** Initial hint toward camera (+Z) until first hover hit */
-  const cursorLightTarget = useRef(new THREE.Vector3(0, 0.2, 4.2));
-  const cursorLightIntensity = useRef(0);
-  const cursorLightIntensityTarget = useRef(0);
+  const wireMeshOuterRef = useRef<THREE.Mesh>(null);
 
   const blobUniforms = useMemo(() => createBlobUniforms(), []);
   const material = useMemo(
@@ -136,13 +131,18 @@ function BlobScene({
   );
 
   useEffect(() => {
-    const wm = wireMeshRef.current;
-    if (!wm) return;
-    wm.raycast = (raycaster, intersects) => {
-      void raycaster;
-      void intersects;
-    };
-  }, []);
+    const id = requestAnimationFrame(() => {
+      for (const ref of [wireMeshRef, wireMeshOuterRef]) {
+        const m = ref.current;
+        if (!m) continue;
+        m.raycast = (raycaster, intersects) => {
+          void raycaster;
+          void intersects;
+        };
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, [extraWireShell]);
 
   useEffect(() => {
     return () => {
@@ -159,9 +159,10 @@ function BlobScene({
     u.uNoiseFreq.value = noiseFreq.current;
     u.uNoiseAmp.value = noiseAmp.current;
     u.uHoverStrength.value = hoverSmoothedRef.current;
+    u.uClickKick.value = clickKick.current;
 
     material.roughness = roughness.current;
-    material.envMapIntensity = 2.45;
+    material.envMapIntensity = 2.68;
     const em = emissive.current;
     material.emissiveIntensity = em;
     if (em > 0.0001) {
@@ -178,60 +179,23 @@ function BlobScene({
       const s = scale.current;
       g.scale.setScalar(s);
     }
-
-    const cursorLight = cursorLightRef.current;
-    if (cursorLight) {
-      cursorLight.position.lerp(
-        cursorLightTarget.current,
-        1 - Math.exp(-delta * 11),
-      );
-      const ti = cursorLightIntensityTarget.current;
-      cursorLightIntensity.current +=
-        (ti - cursorLightIntensity.current) * (1 - Math.exp(-delta * 8));
-      cursorLight.intensity = cursorLightIntensity.current;
-    }
   });
 
   const handleClick = useCallback(
     (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
-      setWireframeActive((v) => !v);
+      setExtraWireShell(true);
+      applyClickImpulse();
       cycleState();
       const ev = e.nativeEvent;
       onRipple(ev.clientX, ev.clientY);
     },
-    [cycleState, onRipple],
-  );
-
-  const updateCursorLightFromEvent = useCallback(
-    (e: ThreeEvent<PointerEvent>) => {
-      if (!e.face) return;
-      const towardCam = new THREE.Vector3().subVectors(camera.position, e.point);
-      if (towardCam.lengthSq() < 1e-8) return;
-      towardCam.normalize();
-      cursorLightTarget.current
-        .copy(e.point)
-        .addScaledVector(towardCam, 0.38);
-      cursorLightIntensityTarget.current = CURSOR_LIGHT_PEAK;
-    },
-    [camera],
+    [applyClickImpulse, cycleState, onRipple],
   );
 
   return (
     <>
       <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={45} near={0.1} far={100} />
-      <directionalLight
-        position={[BACKLIGHT_POS.x, BACKLIGHT_POS.y, BACKLIGHT_POS.z]}
-        intensity={0.95}
-        color={new THREE.Color(0.78, 0.82, 0.92)}
-      />
-      <pointLight
-        ref={cursorLightRef}
-        intensity={0}
-        distance={CURSOR_LIGHT_DISTANCE}
-        decay={2}
-        color={new THREE.Color(0.94, 0.96, 1)}
-      />
       <BlobEnvironment />
       <group ref={groupRef}>
         <mesh
@@ -241,25 +205,24 @@ function BlobScene({
           onClick={handleClick}
           onPointerEnter={() => {
             pointerHandlers.onPointerEnter();
-            onHoverChange(true);
           }}
           onPointerLeave={() => {
             pointerHandlers.onPointerLeave();
-            onHoverChange(false);
-            cursorLightIntensityTarget.current = 0;
-          }}
-          onPointerMove={(e) => {
-            updateCursorLightFromEvent(e);
-            const ev = e.nativeEvent;
-            onGlowMove(ev.clientX, ev.clientY);
           }}
         />
         <mesh
           ref={wireMeshRef}
           geometry={geometry}
           material={wireMaterial}
-          visible={wireframeActive}
           renderOrder={1}
+        />
+        <mesh
+          ref={wireMeshOuterRef}
+          geometry={geometry}
+          material={wireMaterial}
+          visible={extraWireShell}
+          scale={1.019}
+          renderOrder={2}
         />
       </group>
     </>
@@ -275,19 +238,10 @@ export default function MetallicBlob({
   const [mounted, setMounted] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [dpr, setDpr] = useState(1);
-  const [hovering, setHovering] = useState(false);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>(
     [],
   );
-  const glowRef = useRef<HTMLDivElement>(null);
   const rippleId = useRef(0);
-
-  const moveGlow = useCallback((x: number, y: number) => {
-    const el = glowRef.current;
-    if (!el) return;
-    el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-  }, []);
-
   useEffect(() => {
     setMounted(true);
     setReducedMotion(
@@ -355,28 +309,10 @@ export default function MetallicBlob({
               initialState={initialState}
               onStateChange={onStateChange}
               onRipple={addRipple}
-              onHoverChange={setHovering}
-              onGlowMove={moveGlow}
             />
           </Canvas>
         </Suspense>
       </div>
-
-      <div
-        ref={glowRef}
-        className="pointer-events-none fixed z-[5] h-[96px] w-[96px] rounded-full"
-        style={{
-          opacity: hovering ? 0.11 : 0,
-          background:
-            "radial-gradient(circle, rgba(248,250,255,0.55) 0%, rgba(150,170,210,0.08) 42%, transparent 68%)",
-          filter: "blur(18px)",
-          transition: "opacity 0.25s ease-out",
-          left: 0,
-          top: 0,
-          willChange: "transform, opacity",
-        }}
-        aria-hidden
-      />
 
       <div className="pointer-events-none fixed inset-0 z-[6] overflow-hidden">
         {ripples.map((r) => (

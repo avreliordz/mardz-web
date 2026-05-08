@@ -60,6 +60,7 @@ uniform float uNoisePhase;
 uniform float uNoiseFreq;
 uniform float uNoiseAmp;
 uniform float uHoverStrength;
+uniform float uClickKick;
 `;
 
 /** Injected after #include <begin_vertex> — soft, fluid displacement (low jag, round silhouette) */
@@ -74,8 +75,11 @@ export const BLOB_VERTEX_DISPLACE_SNIPPET = /* glsl */ `
   float shaped = sign(blend) * pow(abs(blend), 0.72);
   float roundBias = 1.0 - length(transformed) * 0.028;
   roundBias = clamp(roundBias, 0.88, 1.0);
-  float disp = shaped * uNoiseAmp * h * roundBias * 0.95;
+  float tapMul = 1.0 + uClickKick * 2.55;
+  float disp = shaped * uNoiseAmp * h * roundBias * 0.95 * tapMul;
   transformed += dir * disp;
+  float ring = sin(uNoisePhase * 16.0 - length(transformed) * 11.0) * uClickKick * 0.22;
+  transformed += dir * ring;
 `;
 
 export function appendBlobNoiseAndDisplace(vertexShader: string): string {
@@ -83,5 +87,22 @@ export function appendBlobNoiseAndDisplace(vertexShader: string): string {
   return withNoise.replace(
     "#include <begin_vertex>",
     `#include <begin_vertex>\n${BLOB_VERTEX_DISPLACE_SNIPPET}\n`,
+  );
+}
+
+/** High-frequency grain on lit color (shares uNoisePhase with vertex deform for a subtle living texture). */
+export function appendBlobSurfaceGrain(fragmentShader: string): string {
+  return fragmentShader.replace(
+    "#include <opaque_fragment>",
+    `
+    {
+      vec3 gn = vNormal * 2.1 + normalize(vViewPosition) * 1.85;
+      vec2 h = gn.xy * 26.0 + gn.zy * 18.0;
+      float g1 = fract(sin(dot(h, vec2(12.9898, 78.233)) + uNoisePhase * 2.7) * 43758.5453);
+      float g2 = fract(sin(dot(h.yx * 1.7, vec2(39.346, 11.234)) + uNoisePhase * 1.9) * 23421.0);
+      float grain = g1 * 0.58 + g2 * 0.42;
+      outgoingLight *= mix(0.88, 1.12, grain);
+    }
+    #include <opaque_fragment>`,
   );
 }

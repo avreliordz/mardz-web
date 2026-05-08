@@ -17,8 +17,12 @@ export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  const cx = EQ_W * 0.38;
-  const cy = EQ_H * 0.26;
+  const cx0 = EQ_W / 2;
+  const cy0 = EQ_H / 2;
+  const spot = Math.hypot(EQ_W, EQ_H) * 0.11;
+  const ang = Math.PI / 4;
+  const cx = cx0 + Math.cos(ang) * spot;
+  const cy = cy0 - Math.sin(ang) * spot;
   const rad = Math.hypot(EQ_W, EQ_H) * 0.95;
   const rg = ctx.createRadialGradient(cx, cy, rad * 0.05, cx, cy, rad);
   rg.addColorStop(0, "#f2f2f2");
@@ -29,7 +33,13 @@ export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
   ctx.fillStyle = rg;
   ctx.fillRect(0, 0, EQ_W, EQ_H);
 
-  const vg = ctx.createLinearGradient(0, 0, EQ_W * 0.7, EQ_H * 0.9);
+  const halfDiag = Math.hypot(EQ_W, EQ_H) * 0.52;
+  const vg = ctx.createLinearGradient(
+    cx0 - Math.cos(ang) * halfDiag,
+    cy0 - Math.sin(ang) * halfDiag,
+    cx0 + Math.cos(ang) * halfDiag,
+    cy0 + Math.sin(ang) * halfDiag,
+  );
   vg.addColorStop(0, "rgba(255,255,255,0.14)");
   vg.addColorStop(0.35, "rgba(80,80,80,0.08)");
   vg.addColorStop(0.55, "rgba(0,0,0,0.12)");
@@ -48,7 +58,7 @@ export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
   for (let y = 0; y < nh; y++) {
     for (let x = 0; x < nw; x++) {
       const i = (y * nw + x) * 4;
-      const v = 70 + Math.random() * 185;
+      const v = 55 + Math.random() * 200;
       img.data[i] = v;
       img.data[i + 1] = v;
       img.data[i + 2] = v;
@@ -59,9 +69,12 @@ export function paintBlobEquirectEnv(canvas: HTMLCanvasElement) {
 
   ctx.save();
   ctx.globalCompositeOperation = "soft-light";
-  ctx.filter = "blur(32px)";
-  ctx.globalAlpha = 0.5;
+  ctx.filter = "blur(28px)";
+  ctx.globalAlpha = 0.62;
   ctx.drawImage(noise, 0, 0, EQ_W, EQ_H);
+  ctx.globalAlpha = 0.28;
+  ctx.filter = "blur(6px)";
+  ctx.drawImage(noise, Math.random() * 6, Math.random() * 6, EQ_W, EQ_H);
   ctx.restore();
 }
 
