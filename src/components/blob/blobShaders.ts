@@ -67,10 +67,11 @@ uniform float uClickKick;
 export const BLOB_VERTEX_DISPLACE_SNIPPET = /* glsl */ `
   vec3 dir = normalize(transformed);
   float h = 1.0 + uHoverStrength * 0.42;
-  float t = uNoisePhase * 0.92;
+  float t = uNoisePhase * 1.04;
+  float drift = uNoisePhase * 0.33;
   float f = uNoiseFreq * 0.82;
-  float n1 = snoise(dir * f + vec3(t * 0.9, t * 0.88, t * 0.95));
-  float n2 = snoise(dir * f * 1.55 + vec3(t * 1.05, t * 1.12, t * 0.98)) * 0.52;
+  float n1 = snoise(dir * f + vec3(t * 0.9 + drift * 0.35, t * 0.88 - drift * 0.28, t * 0.95 + drift * 0.2));
+  float n2 = snoise(dir * f * 1.55 + vec3(t * 1.05 + drift * 0.22, t * 1.12, t * 0.98 - drift * 0.31)) * 0.52;
   float blend = clamp(n1 * 0.8 + n2 * 0.2, -1.0, 1.0);
   float shaped = sign(blend) * pow(abs(blend), 0.72);
   float roundBias = 1.0 - length(transformed) * 0.028;
@@ -90,18 +91,28 @@ export function appendBlobNoiseAndDisplace(vertexShader: string): string {
   );
 }
 
-/** High-frequency grain on lit color (shares uNoisePhase with vertex deform for a subtle living texture). */
+/** High-frequency grain + slow gradient wash on final lit color (runs after IBL, before tonemapping). */
 export function appendBlobSurfaceGrain(fragmentShader: string): string {
   return fragmentShader.replace(
     "#include <opaque_fragment>",
     `
     {
-      vec3 gn = vNormal * 2.1 + normalize(vViewPosition) * 1.85;
-      vec2 h = gn.xy * 26.0 + gn.zy * 18.0;
-      float g1 = fract(sin(dot(h, vec2(12.9898, 78.233)) + uNoisePhase * 2.7) * 43758.5453);
-      float g2 = fract(sin(dot(h.yx * 1.7, vec2(39.346, 11.234)) + uNoisePhase * 1.9) * 23421.0);
-      float grain = g1 * 0.58 + g2 * 0.42;
-      outgoingLight *= mix(0.88, 1.12, grain);
+      vec3 nSurf = normalize(normal);
+      float t = uNoisePhase;
+
+      float wash1 = sin(dot(nSurf, vec3(0.71, 0.52, 0.47)) * 4.6 + t * 0.42);
+      float wash2 = sin(dot(nSurf, vec3(-0.55, 0.78, 0.30)) * 3.9 - t * 0.33);
+      float wash3 = cos(dot(nSurf, vec3(0.12, -0.66, 0.74)) * 5.1 + t * 0.48);
+      float wash = (wash1 * 0.4 + wash2 * 0.38 + wash3 * 0.22) * 0.5 + 0.5;
+      outgoingLight *= mix(0.87, 1.13, wash);
+
+      vec3 gn = nSurf * 2.2 + normalize(vViewPosition) * 1.85;
+      vec2 h = gn.xy * 27.0 + gn.zy * 18.5 + vec2(t * 1.55, -t * 1.18);
+      float g1 = fract(sin(dot(h, vec2(12.9898, 78.233)) + t * 2.85) * 43758.5453);
+      float g2 = fract(sin(dot(h.yx * 1.72 + vec2(t * 0.65, -t * 0.42), vec2(39.346, 11.234)) + t * 2.05) * 23421.0);
+      float g3 = fract(sin(dot(h * 1.37 + t * 0.28, vec2(19.1, 47.7)) + t * 3.1) * 19102.7);
+      float grain = g1 * 0.48 + g2 * 0.34 + g3 * 0.18;
+      outgoingLight *= mix(0.84, 1.16, grain);
     }
     #include <opaque_fragment>`,
   );

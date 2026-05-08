@@ -3,16 +3,8 @@
 import { useCallback, useRef } from "react";
 import type { BlobDiscreteState, BlobStateTargets } from "./blob.types";
 
-/** Tuned for smoother, rounder “suspended fluid” silhouette (lower amp/freq). */
+/** Faceted / grid-ish read at index 0; click cycles 0 → 1 → 2 → 0. */
 const STATE_TABLE: BlobStateTargets[] = [
-  {
-    noiseFreq: 0.72,
-    noiseAmp: 0.14,
-    speed: 0.32,
-    roughness: 0.08,
-    scale: 1,
-    emissiveMax: 0,
-  },
   {
     noiseFreq: 1.85,
     noiseAmp: 0.2,
@@ -101,7 +93,7 @@ export function useBlobState(
     clickKick.current *= Math.exp(-dt * 2.15);
 
     const emMax = t.emissiveMax;
-    if (stateRef.current === 3) {
+    if (stateRef.current === 2) {
       strobePhase.current += dt * Math.PI * 2 * 8;
       const pulse = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(strobePhase.current));
       const flicker = 0.06 + 0.02 * Math.sin(dt * 620 + noisePhase.current * 3);
@@ -118,7 +110,7 @@ export function useBlobState(
   }, [computeTargets]);
 
   const cycleState = useCallback(() => {
-    const next = ((stateRef.current + 1) % 4) as BlobDiscreteState;
+    const next = ((stateRef.current + 1) % 3) as BlobDiscreteState;
     stateRef.current = next;
     onStateChange?.(next);
   }, [onStateChange]);

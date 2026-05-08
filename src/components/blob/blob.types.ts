@@ -1,4 +1,4 @@
-export type BlobDiscreteState = 0 | 1 | 2 | 3;
+export type BlobDiscreteState = 0 | 1 | 2;
 
 export interface BlobStateTargets {
   noiseFreq: number;
