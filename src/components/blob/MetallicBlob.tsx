@@ -23,6 +23,9 @@ const DRAG_ROT_Y = 0.0052;
 const DRAG_PINCH = 0.00165;
 const TAP_THRESH_PX = 7;
 const PINCH_LIMIT = 0.15;
+/** Click cycles 1 … MAX then back to 1 duplicate triangle stack (wire shells). */
+const MAX_WIRE_SHELLS = 4;
+const WIRE_SHELL_SCALE_STEP = 0.019;
 
 type BlobUniforms = {
   uNoisePhase: { value: number };
@@ -119,11 +122,10 @@ function BlobScene({ detail, onRipple }: SceneProps) {
     roughness,
     scale,
   } = useBlobState();
-  const [extraWireShell, setExtraWireShell] = useState(false);
+  const [wireShellCount, setWireShellCount] = useState(1);
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
-  const wireMeshRef = useRef<THREE.Mesh>(null);
-  const wireMeshOuterRef = useRef<THREE.Mesh>(null);
+  const wireMeshRefs = useRef<(THREE.Mesh | null)[]>([]);
   const draggingRef = useRef(false);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const pinchOffsetRef = useRef(0);
@@ -143,9 +145,10 @@ function BlobScene({ detail, onRipple }: SceneProps) {
   );
 
   useEffect(() => {
+    wireMeshRefs.current.length = wireShellCount;
     const id = requestAnimationFrame(() => {
-      for (const ref of [wireMeshRef, wireMeshOuterRef]) {
-        const m = ref.current;
+      for (let i = 0; i < wireShellCount; i++) {
+        const m = wireMeshRefs.current[i];
         if (!m) continue;
         m.raycast = (raycaster, intersects) => {
           void raycaster;
@@ -154,7 +157,7 @@ function BlobScene({ detail, onRipple }: SceneProps) {
       }
     });
     return () => cancelAnimationFrame(id);
-  }, [extraWireShell]);
+  }, [wireShellCount]);
 
   useEffect(() => {
     return () => {
@@ -204,7 +207,7 @@ function BlobScene({ detail, onRipple }: SceneProps) {
       const dx = clientX - start.x;
       const dy = clientY - start.y;
       if (dx * dx + dy * dy < TAP_THRESH_PX * TAP_THRESH_PX) {
-        setExtraWireShell(true);
+        setWireShellCount((n) => (n % MAX_WIRE_SHELLS) + 1);
         applyClickImpulse();
         onRipple(clientX, clientY);
       }
@@ -267,20 +270,18 @@ function BlobScene({ detail, onRipple }: SceneProps) {
             pointerHandlers.onPointerLeave();
           }}
         />
-        <mesh
-          ref={wireMeshRef}
-          geometry={geometry}
-          material={wireMaterial}
-          renderOrder={1}
-        />
-        <mesh
-          ref={wireMeshOuterRef}
-          geometry={geometry}
-          material={wireMaterial}
-          visible={extraWireShell}
-          scale={1.019}
-          renderOrder={2}
-        />
+        {Array.from({ length: wireShellCount }, (_, i) => (
+          <mesh
+            key={i}
+            ref={(el) => {
+              wireMeshRefs.current[i] = el;
+            }}
+            geometry={geometry}
+            material={wireMaterial}
+            scale={1 + i * WIRE_SHELL_SCALE_STEP}
+            renderOrder={i + 1}
+          />
+        ))}
       </group>
     </>
   );
@@ -315,6 +316,7 @@ export default function MetallicBlob({
 
   const handleGlCreated = useCallback((state: RootState) => {
     state.gl.setClearColor(0x000000, 1);
+    state.gl.domElement.setAttribute("data-blob-hero", "");
     state.gl.domElement.addEventListener("webglcontextlost", (e) => {
       e.preventDefault();
     });

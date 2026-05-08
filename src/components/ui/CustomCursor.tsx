@@ -1,7 +1,9 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
 
 const spring = { damping: 28, stiffness: 400, mass: 0.15 };
 
@@ -20,6 +22,7 @@ function hitTest(clientX: number, clientY: number) {
 }
 
 export function CustomCursor() {
+  const [mountEl, setMountEl] = useState<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [lightBg, setLightBg] = useState(false);
@@ -29,6 +32,10 @@ export function CustomCursor() {
   const y = useMotionValue(0);
   const sx = useSpring(x, spring);
   const sy = useSpring(y, spring);
+
+  useEffect(() => {
+    setMountEl(document.body);
+  }, []);
 
   useEffect(() => {
     const mqFine = window.matchMedia("(pointer: fine)");
@@ -82,31 +89,51 @@ export function CustomCursor() {
 
   const base = hovering ? 48 : overBlobHero ? 14 : 12;
   const dim = Math.min(base + (pressed ? 4 : 0), 52);
-  const bg = lightBg ? "rgba(10,10,10,0.85)" : "rgba(255,255,255,0.9)";
-  const borderCol = lightBg ? "rgba(10,10,10,0.4)" : "rgba(255,255,255,0.5)";
 
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-      initial={false}
-      animate={{ opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.12, ease: "easeOut" }}
+  const discStyle: CSSProperties = lightBg
+    ? {
+        width: dim,
+        height: dim,
+        backgroundColor: "rgba(18,18,18,0.92)",
+        boxShadow:
+          "0 0 0 1px rgba(255,255,255,0.55), 0 0 0 2px rgba(10,10,10,0.4), 0 4px 20px rgba(0,0,0,0.35)",
+        transitionProperty: "width, height, background-color, box-shadow",
+        transitionDuration: "0.16s",
+        transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+      }
+    : {
+        width: dim,
+        height: dim,
+        backgroundColor: "rgba(252,252,252,0.96)",
+        boxShadow:
+          "0 0 0 1px rgba(10,10,10,0.92), 0 0 0 2px rgba(255,255,255,0.5), 0 3px 18px rgba(0,0,0,0.45)",
+        transitionProperty: "width, height, background-color, box-shadow",
+        transitionDuration: "0.16s",
+        transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+      };
+
+  const layer = (
+    <div
+      className={cn(
+        "pointer-events-none fixed inset-0 transition-opacity duration-100 ease-out",
+        visible ? "opacity-100" : "opacity-0",
+      )}
+      style={{ zIndex: 2147483646 }}
       aria-hidden
     >
       <motion.div
-        className="-translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          x: sx,
-          y: sy,
-          width: dim,
-          height: dim,
-          backgroundColor: bg,
-          border: `1px solid ${borderCol}`,
-          transitionProperty: "width, height, background-color, border-color",
-          transitionDuration: "0.16s",
-          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      />
-    </motion.div>
+        className="pointer-events-none fixed left-0 top-0"
+        style={{ x: sx, y: sy, zIndex: 2147483647 }}
+      >
+        <div
+          className="-translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={discStyle}
+        />
+      </motion.div>
+    </div>
   );
+
+  if (!mountEl) return null;
+
+  return createPortal(layer, mountEl);
 }
