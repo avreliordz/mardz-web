@@ -118,7 +118,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     outcomes: [
       { label: "User research", value: "100 Hours" },
       { label: "Sponsorship raised", value: "$10K USD" },
-      { label: "Users & community members", value: "+4K" },
+      { label: "Users & community members", value: "+4000" },
     ],
     gallery: galleryWithPreview("Itemz.gg", projectList[1].previewGif),
   },
@@ -165,9 +165,9 @@ export const caseStudies: Record<string, CaseStudy> = {
       "Full-stack implementation",
     ],
     outcomes: [
-      { label: "In 1 Month after launch", value: "+10.5K readers" },
+      { label: "In 1 Month after launch", value: "+10.5K Readers" },
       { label: "Seed money raised", value: "$10K USD" },
-      { label: "AI-assisted editorial", value: "+80 articles" },
+      { label: "AI-assisted editorial", value: "+80 Articles" },
     ],
     gallery: galleryWithPreview(
       "Territorio Nacional",
