@@ -9,7 +9,7 @@ export interface BlobStateTargets {
 
 export interface MetallicBlobProps {
   className?: string;
-  /** Icosahedron subdivision detail (default 5 for broad browser support) */
+  /** Initial icosahedron subdivision; tap cycles detail between 4 and 7 (more mesh triangles). */
   icosahedronDetail?: number;
 }
 

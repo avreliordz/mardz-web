@@ -23,9 +23,13 @@ const DRAG_ROT_Y = 0.0052;
 const DRAG_PINCH = 0.00165;
 const TAP_THRESH_PX = 7;
 const PINCH_LIMIT = 0.15;
-/** Click cycles 1 … MAX then back to 1 duplicate triangle stack (wire shells). */
-const MAX_WIRE_SHELLS = 4;
-const WIRE_SHELL_SCALE_STEP = 0.019;
+/** Icosahedron subdivision steps: more triangles on the same mesh (not extra wire shells). */
+const MIN_ICO_DETAIL = 4;
+const MAX_ICO_DETAIL = 7;
+
+function clampIcoDetail(d: number): number {
+  return Math.min(MAX_ICO_DETAIL, Math.max(MIN_ICO_DETAIL, Math.round(d)));
+}
 
 type BlobUniforms = {
   uNoisePhase: { value: number };
@@ -105,10 +109,11 @@ function createWireframeOverlayMaterial(uniforms: BlobUniforms) {
 
 type SceneProps = {
   detail: number;
+  onCycleDetail: () => void;
   onRipple: (clientX: number, clientY: number) => void;
 };
 
-function BlobScene({ detail, onRipple }: SceneProps) {
+function BlobScene({ detail, onCycleDetail, onRipple }: SceneProps) {
   const { gl } = useThree();
   const {
     advance,
@@ -122,10 +127,9 @@ function BlobScene({ detail, onRipple }: SceneProps) {
     roughness,
     scale,
   } = useBlobState();
-  const [wireShellCount, setWireShellCount] = useState(1);
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
-  const wireMeshRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const wireMeshRef = useRef<THREE.Mesh>(null);
   const draggingRef = useRef(false);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const pinchOffsetRef = useRef(0);
@@ -145,19 +149,16 @@ function BlobScene({ detail, onRipple }: SceneProps) {
   );
 
   useEffect(() => {
-    wireMeshRefs.current.length = wireShellCount;
     const id = requestAnimationFrame(() => {
-      for (let i = 0; i < wireShellCount; i++) {
-        const m = wireMeshRefs.current[i];
-        if (!m) continue;
-        m.raycast = (raycaster, intersects) => {
-          void raycaster;
-          void intersects;
-        };
-      }
+      const wm = wireMeshRef.current;
+      if (!wm) return;
+      wm.raycast = (raycaster, intersects) => {
+        void raycaster;
+        void intersects;
+      };
     });
     return () => cancelAnimationFrame(id);
-  }, [wireShellCount]);
+  }, [detail]);
 
   useEffect(() => {
     return () => {
@@ -207,12 +208,12 @@ function BlobScene({ detail, onRipple }: SceneProps) {
       const dx = clientX - start.x;
       const dy = clientY - start.y;
       if (dx * dx + dy * dy < TAP_THRESH_PX * TAP_THRESH_PX) {
-        setWireShellCount((n) => (n % MAX_WIRE_SHELLS) + 1);
+        onCycleDetail();
         applyClickImpulse();
         onRipple(clientX, clientY);
       }
     },
-    [applyClickImpulse, gl, onRipple],
+    [applyClickImpulse, gl, onCycleDetail, onRipple],
   );
 
   const handlePointerDown = useCallback(
@@ -270,18 +271,12 @@ function BlobScene({ detail, onRipple }: SceneProps) {
             pointerHandlers.onPointerLeave();
           }}
         />
-        {Array.from({ length: wireShellCount }, (_, i) => (
-          <mesh
-            key={i}
-            ref={(el) => {
-              wireMeshRefs.current[i] = el;
-            }}
-            geometry={geometry}
-            material={wireMaterial}
-            scale={1 + i * WIRE_SHELL_SCALE_STEP}
-            renderOrder={i + 1}
-          />
-        ))}
+        <mesh
+          ref={wireMeshRef}
+          geometry={geometry}
+          material={wireMaterial}
+          renderOrder={1}
+        />
       </group>
     </>
   );
@@ -294,10 +289,19 @@ export default function MetallicBlob({
   const [mounted, setMounted] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [dpr, setDpr] = useState(1);
+  const [icoDetail, setIcoDetail] = useState(() => clampIcoDetail(icosahedronDetail));
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>(
     [],
   );
   const rippleId = useRef(0);
+
+  useEffect(() => {
+    setIcoDetail(clampIcoDetail(icosahedronDetail));
+  }, [icosahedronDetail]);
+
+  const cycleIcoDetail = useCallback(() => {
+    setIcoDetail((d) => (d >= MAX_ICO_DETAIL ? MIN_ICO_DETAIL : d + 1));
+  }, []);
   useEffect(() => {
     setMounted(true);
     setReducedMotion(
@@ -361,7 +365,11 @@ export default function MetallicBlob({
             }}
             onCreated={handleGlCreated}
           >
-            <BlobScene detail={icosahedronDetail} onRipple={addRipple} />
+            <BlobScene
+              detail={icoDetail}
+              onCycleDetail={cycleIcoDetail}
+              onRipple={addRipple}
+            />
           </Canvas>
         </Suspense>
       </div>
