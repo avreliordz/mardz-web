@@ -13,7 +13,7 @@ export function Capabilities() {
   return (
     <section
       id="capabilities"
-      className="border-t border-graphite bg-canvas px-5 py-24 md:px-8"
+      className="border-t border-graphite bg-paper px-5 py-24 md:px-8"
       aria-labelledby="capabilities-heading"
     >
       <div className="mx-auto max-w-[1400px]">

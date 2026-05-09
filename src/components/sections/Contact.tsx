@@ -18,7 +18,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="bg-canvas px-5 py-24 md:px-8"
+      className="bg-paper px-5 py-24 md:px-8"
       aria-labelledby="contact-heading"
     >
       <div className="mx-auto max-w-[1400px]">
