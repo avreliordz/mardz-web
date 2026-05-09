@@ -18,7 +18,7 @@ export function Capabilities() {
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">— 04</p>
+          <p className="font-mono-label text-smoke">— 05</p>
           <h2 id="capabilities-heading" className="section-title mt-4 text-ink">
             Capabilities
           </h2>

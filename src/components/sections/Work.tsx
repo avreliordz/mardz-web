@@ -13,7 +13,7 @@ export function Work() {
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">— 03</p>
+          <p className="font-mono-label text-smoke">— 04</p>
           <h2
             id="work-heading"
             className="section-title mt-4 text-ink"

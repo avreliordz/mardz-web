@@ -54,7 +54,7 @@ export function Experience() {
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">— 05</p>
+          <p className="font-mono-label text-smoke">— 03</p>
           <h2 id="experience-heading" className="section-title mt-4 text-ink">
             Experience
           </h2>
