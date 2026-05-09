@@ -10,14 +10,13 @@ const spring = { damping: 28, stiffness: 400, mass: 0.15 };
 function hitTest(clientX: number, clientY: number) {
   const el = document.elementFromPoint(clientX, clientY);
   if (!el) {
-    return { overBlobHero: false, hovering: false, lightBg: false };
+    return { overBlobHero: false, hovering: false };
   }
   return {
     overBlobHero: !!el.closest("[data-blob-hero]"),
     hovering: !!el.closest(
       "a, button, [role='button'], input, textarea, [data-cursor-hover]",
     ),
-    lightBg: !!el.closest("[data-cursor-light]"),
   };
 }
 
@@ -25,7 +24,6 @@ export function CustomCursor() {
   const [mountEl, setMountEl] = useState<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [lightBg, setLightBg] = useState(false);
   const [overBlobHero, setOverBlobHero] = useState(false);
   const [pressed, setPressed] = useState(false);
   const x = useMotionValue(0);
@@ -50,7 +48,6 @@ export function CustomCursor() {
       const hit = hitTest(e.clientX, e.clientY);
       setOverBlobHero(hit.overBlobHero);
       setHovering(hit.hovering);
-      setLightBg(hit.lightBg);
     };
 
     const hide = () => setVisible(false);
@@ -90,27 +87,16 @@ export function CustomCursor() {
   const base = hovering ? 48 : overBlobHero ? 14 : 12;
   const dim = Math.min(base + (pressed ? 4 : 0), 52);
 
-  const discStyle: CSSProperties = lightBg
-    ? {
-        width: dim,
-        height: dim,
-        backgroundColor: "rgba(18,18,18,0.92)",
-        boxShadow:
-          "0 0 0 1px rgba(255,255,255,0.55), 0 0 0 2px rgba(10,10,10,0.4), 0 4px 20px rgba(0,0,0,0.35)",
-        transitionProperty: "width, height, background-color, box-shadow",
-        transitionDuration: "0.16s",
-        transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-      }
-    : {
-        width: dim,
-        height: dim,
-        backgroundColor: "rgba(252,252,252,0.96)",
-        boxShadow:
-          "0 0 0 1px rgba(10,10,10,0.92), 0 0 0 2px rgba(255,255,255,0.5), 0 3px 18px rgba(0,0,0,0.45)",
-        transitionProperty: "width, height, background-color, box-shadow",
-        transitionDuration: "0.16s",
-        transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-      };
+  const discStyle: CSSProperties = {
+    width: dim,
+    height: dim,
+    backgroundColor: "rgba(18,18,18,0.92)",
+    boxShadow:
+      "0 0 0 1px rgba(255,255,255,0.55), 0 0 0 2px rgba(10,10,10,0.25), 0 4px 20px rgba(0,0,0,0.18)",
+    transitionProperty: "width, height, background-color, box-shadow",
+    transitionDuration: "0.16s",
+    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+  };
 
   const layer = (
     <div

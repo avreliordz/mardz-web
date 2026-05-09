@@ -18,15 +18,15 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="bg-black px-5 py-24 md:px-8"
+      className="bg-canvas px-5 py-24 md:px-8"
       aria-labelledby="contact-heading"
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">§ 07</p>
+          <p className="font-mono-label text-smoke">— 07</p>
           <h2
             id="contact-heading"
-            className="section-title mt-6 max-w-3xl text-paper"
+            className="section-title mt-6 max-w-3xl text-ink"
           >
             Let&apos;s build
             <br />
@@ -52,7 +52,7 @@ export function Contact() {
                         ? "noopener noreferrer"
                         : undefined
                     }
-                    className="text-sm text-fog underline-offset-4 transition-colors hover:text-paper hover:underline"
+                    className="text-sm text-fog underline-offset-4 transition-colors hover:text-ink hover:underline"
                     data-cursor-hover
                   >
                     {l.label}

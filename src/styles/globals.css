@@ -3,19 +3,20 @@
 @tailwind utilities;
 
 :root {
+  --color-canvas: #f0f0f0;
   --color-black: #0a0a0a;
-  --color-ink: #111111;
-  --color-carbon: #1c1c1c;
-  --color-graphite: #2e2e2e;
-  --color-ash: #6b6b6b;
-  --color-smoke: #a8a8a8;
-  --color-fog: #d4d4d4;
-  --color-paper: #f5f4f0;
-  --color-white: #fafafa;
-  --color-accent: #ffffff;
+  --color-ink: #0a0a0a;
+  --color-carbon: #e8e8e8;
+  --color-graphite: #c8c8c8;
+  --color-ash: #757575;
+  --color-smoke: #666666;
+  --color-fog: #3a3a3a;
+  --color-paper: #ffffff;
+  --color-white: #ffffff;
+  --color-accent: #0a0a0a;
 
-  --background: var(--color-black);
-  --foreground: var(--color-white);
+  --background: var(--color-canvas);
+  --foreground: var(--color-black);
 
   --font-display: var(--font-space-mono), ui-monospace, monospace;
   --font-body: var(--font-space-mono), ui-monospace, monospace;
@@ -35,17 +36,17 @@
   }
 
   body {
-    @apply bg-black text-fog antialiased;
+    @apply bg-canvas text-fog antialiased;
     font-family: var(--font-body);
   }
 
   img[src$=".gif"] {
-    background-color: #000;
+    background-color: #f0f0f0;
   }
 
   ::selection {
-    background-color: rgba(250, 250, 250, 0.2);
-    color: var(--color-white);
+    background-color: rgba(10, 10, 10, 0.12);
+    color: var(--color-black);
   }
 
   :focus-visible {

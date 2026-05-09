@@ -319,7 +319,7 @@ export default function MetallicBlob({
   }, []);
 
   const handleGlCreated = useCallback((state: RootState) => {
-    state.gl.setClearColor(0x000000, 1);
+    state.gl.setClearColor(0xf0f0f0, 1);
     state.gl.domElement.setAttribute("data-blob-hero", "");
     state.gl.domElement.addEventListener("webglcontextlost", (e) => {
       e.preventDefault();
@@ -330,7 +330,7 @@ export default function MetallicBlob({
     return (
       <div
         className={cn(
-          "absolute inset-0 z-0 h-full min-h-[100vh] w-full bg-black",
+          "absolute inset-0 z-0 h-full min-h-[100vh] w-full bg-canvas",
           className,
         )}
         data-blob-hero
@@ -341,7 +341,7 @@ export default function MetallicBlob({
   return (
     <motion.div
       className={cn(
-        "absolute inset-0 z-0 h-full min-h-[100vh] w-full bg-black",
+        "absolute inset-0 z-0 h-full min-h-[100vh] w-full bg-canvas",
         className,
       )}
       data-blob-hero
@@ -351,7 +351,7 @@ export default function MetallicBlob({
     >
       <div className="absolute inset-0 cursor-none">
         <Suspense
-          fallback={<div className="absolute inset-0 bg-black" aria-hidden />}
+          fallback={<div className="absolute inset-0 bg-canvas" aria-hidden />}
         >
           <Canvas
             className="h-full w-full touch-none"
@@ -378,7 +378,7 @@ export default function MetallicBlob({
         {ripples.map((r) => (
           <span
             key={r.id}
-            className="pointer-events-none absolute size-10 animate-blob-ripple rounded-full border border-white/25"
+            className="pointer-events-none absolute size-10 animate-blob-ripple rounded-full border border-black/18"
             style={{
               left: r.x,
               top: r.y,

@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        canvas: "var(--color-canvas)",
         black: "var(--color-black)",
         ink: "var(--color-ink)",
         carbon: "var(--color-carbon)",

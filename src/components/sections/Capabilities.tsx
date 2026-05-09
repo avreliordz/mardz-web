@@ -13,13 +13,13 @@ export function Capabilities() {
   return (
     <section
       id="capabilities"
-      className="border-t border-graphite bg-black px-5 py-24 md:px-8"
+      className="border-t border-graphite bg-canvas px-5 py-24 md:px-8"
       aria-labelledby="capabilities-heading"
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">§ 04</p>
-          <h2 id="capabilities-heading" className="section-title mt-4 text-paper">
+          <p className="font-mono-label text-smoke">— 04</p>
+          <h2 id="capabilities-heading" className="section-title mt-4 text-ink">
             Capabilities
           </h2>
         </ScrollReveal>
@@ -40,11 +40,11 @@ export function Capabilities() {
                 >
                   <span className="flex gap-6">
                     <span className="font-mono text-sm text-ash">{c.id}</span>
-                    <span className="font-display text-xl text-paper md:text-2xl">
+                    <span className="font-display text-xl text-ink md:text-2xl">
                       {c.title}
                     </span>
                   </span>
-                  <span className="shrink-0 text-paper" aria-hidden>
+                  <span className="shrink-0 text-ink" aria-hidden>
                     {isOpen ? (
                       <Minus className="h-5 w-5" />
                     ) : (

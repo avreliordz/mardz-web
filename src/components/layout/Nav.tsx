@@ -19,7 +19,7 @@ export function Nav() {
   const headerBg = useTransform(
     scrollY,
     [0, 80],
-    ["rgba(10,10,10,0)", "rgba(10,10,10,0.88)"],
+    ["rgba(240,240,240,0)", "rgba(240,240,240,0.92)"],
   );
   const backdropFilter = useTransform(
     scrollY,
@@ -40,7 +40,7 @@ export function Nav() {
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 md:px-8">
           <Link
             href="/"
-            className="font-mono text-xs tracking-[0.25em] text-paper"
+            className="font-mono text-xs tracking-[0.25em] text-ink"
             aria-label="MARDZ, home"
           >
             MARDZ™
@@ -51,18 +51,18 @@ export function Nav() {
               <motion.a
                 key={l.href}
                 href={l.href}
-                className="group relative font-body text-sm text-fog transition-colors hover:text-paper"
+                className="group relative font-body text-sm text-ash transition-colors hover:text-ink"
                 whileHover={{ y: -1 }}
                 transition={{ duration: motionDuration.fast, ease: motionEasing }}
               >
                 <span className="relative">
                   {l.label}
-                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-paper transition-all duration-300 ease-out-expo group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out-expo group-hover:w-full" />
                 </span>
               </motion.a>
             ))}
             <MagneticButton href="#contact" aria-label="Go to contact">
-              <span className="rounded-full border border-paper px-4 py-2 font-mono text-xs uppercase tracking-widest text-paper transition-colors duration-300 hover:bg-paper hover:text-black">
+              <span className="rounded-full border border-ink px-4 py-2 font-mono text-xs uppercase tracking-widest text-ink transition-colors duration-300 hover:bg-ink hover:text-canvas">
                 Let&apos;s talk →
               </span>
             </MagneticButton>
@@ -70,7 +70,7 @@ export function Nav() {
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md border border-graphite p-2 text-paper md:hidden"
+            className="inline-flex items-center justify-center rounded-md border border-graphite p-2 text-ink md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
@@ -89,7 +89,7 @@ export function Nav() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: motionDuration.base, ease: motionEasing }}
-            className="fixed inset-0 z-[100] flex flex-col bg-black pt-24 md:hidden"
+            className="fixed inset-0 z-[100] flex flex-col bg-canvas pt-24 md:hidden"
           >
             <nav className="flex flex-1 flex-col gap-6 px-8 py-8" aria-label="Mobile">
               {links.map((l, i) => (
@@ -100,7 +100,7 @@ export function Nav() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * i, duration: motionDuration.fast }}
-                  className="font-display text-4xl text-paper"
+                  className="font-display text-4xl text-ink"
                 >
                   {l.label}
                 </motion.a>
@@ -108,7 +108,7 @@ export function Nav() {
               <a
                 href="#contact"
                 onClick={() => setOpen(false)}
-                className="mt-4 inline-flex w-max rounded-full border border-paper px-6 py-3 font-mono text-sm uppercase tracking-widest text-paper"
+                className="mt-4 inline-flex w-max rounded-full border border-ink px-6 py-3 font-mono text-sm uppercase tracking-widest text-ink"
               >
                 Let&apos;s talk →
               </a>

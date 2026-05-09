@@ -24,7 +24,7 @@ export function TextReveal({
         <div key={line} className="overflow-hidden">
           <motion.span
             className={cn(
-              "hero-title block text-paper",
+              "hero-title block text-ink",
               italicIndices.includes(i) && "hero-title--italic",
               lineClassName,
             )}

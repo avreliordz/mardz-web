@@ -22,7 +22,7 @@ function CaseStudyHeroImage({ study }: { study: CaseStudy }) {
       <img
         src={heroSrc}
         alt={heroAlt}
-        className="absolute inset-0 h-full w-full bg-[#000] object-cover"
+        className="absolute inset-0 h-full w-full bg-canvas object-cover"
       />
     );
   }
@@ -64,11 +64,11 @@ export default function WorkCasePage({ params }: Props) {
   const heroIsGif = heroSrc.endsWith(".gif");
 
   return (
-    <article className="min-h-screen bg-black pb-24 pt-28">
+    <article className="min-h-screen bg-canvas pb-24 pt-28">
       <div className="mx-auto max-w-[1100px] px-5 md:px-8">
         <Link
           href="/#work"
-          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-ash hover:text-paper"
+          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-ash hover:text-ink"
           data-cursor-hover
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
@@ -77,7 +77,7 @@ export default function WorkCasePage({ params }: Props) {
 
         <header className="mt-12 border-b border-graphite pb-12">
           <p className="font-mono text-sm text-ash">{study.yearRange}</p>
-          <h1 className="section-title mt-4 text-paper">{study.title}</h1>
+          <h1 className="section-title mt-4 text-ink">{study.title}</h1>
           <p className="mt-2 text-lg text-fog">{study.client}</p>
           <div className="mt-6 flex flex-wrap gap-2">
             {study.tags.map((t) => (
@@ -94,7 +94,7 @@ export default function WorkCasePage({ params }: Props) {
         <div
           className={cn(
             "relative mt-12 aspect-[16/9] w-full overflow-hidden",
-            heroIsGif ? "bg-[#000]" : "bg-carbon",
+            heroIsGif ? "bg-canvas" : "bg-carbon",
           )}
         >
           <CaseStudyHeroImage study={study} />
@@ -149,7 +149,7 @@ export default function WorkCasePage({ params }: Props) {
                 key={o.label}
                 className="border border-graphite bg-carbon/50 p-6"
               >
-                <p className="font-display text-3xl text-paper">{o.value}</p>
+                <p className="font-display text-3xl text-ink">{o.value}</p>
                 <p className="mt-2 font-mono text-xs uppercase tracking-widest text-ash">
                   {o.label}
                 </p>
@@ -168,7 +168,7 @@ export default function WorkCasePage({ params }: Props) {
                 key={`${g.src}-${i}`}
                 className={cn(
                   "relative mb-4 break-inside-avoid overflow-hidden rounded-sm",
-                  g.src.endsWith(".gif") ? "bg-[#000]" : "bg-carbon",
+                  g.src.endsWith(".gif") ? "bg-canvas" : "bg-carbon",
                 )}
               >
                 {g.src.endsWith(".gif") ? (
@@ -176,7 +176,7 @@ export default function WorkCasePage({ params }: Props) {
                   <img
                     src={g.src}
                     alt={g.alt}
-                    className="h-auto w-full bg-[#000] object-cover"
+                    className="h-auto w-full bg-canvas object-cover"
                   />
                 ) : (
                   <Image
@@ -196,7 +196,7 @@ export default function WorkCasePage({ params }: Props) {
         <div className="mt-20 border-t border-graphite pt-10">
           <Link
             href="/#work"
-            className="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-widest text-paper hover:underline"
+            className="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-widest text-ink hover:underline"
             data-cursor-hover
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />

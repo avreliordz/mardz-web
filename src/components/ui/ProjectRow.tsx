@@ -41,7 +41,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:gap-10">
           <span className="font-mono text-sm text-smoke">{project.num}</span>
           <div>
-            <h3 className="font-display text-2xl text-paper md:text-3xl">
+            <h3 className="font-display text-2xl text-ink md:text-3xl">
               {project.title}
             </h3>
             <p className="mt-1 text-sm text-ash">{project.client}</p>
@@ -56,7 +56,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           </span>
           <ArrowUpRight
             className={cn(
-              "h-6 w-6 shrink-0 text-paper transition-transform duration-300",
+              "h-6 w-6 shrink-0 text-ink transition-transform duration-300",
               hover && "-translate-y-1 translate-x-1",
             )}
             aria-hidden
@@ -70,17 +70,17 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 16 }}
               transition={{ duration: motionDuration.fast, ease: motionEasing }}
-              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(100%,420px)] overflow-hidden border-l border-graphite/50 bg-[#000] md:block"
+              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(100%,420px)] overflow-hidden border-l border-graphite/50 bg-carbon md:block"
             >
               {/* Animated GIF playback */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={project.previewGif}
                 alt=""
-                className="absolute inset-0 h-full w-full bg-[#000] object-cover object-center"
+                className="absolute inset-0 h-full w-full bg-carbon object-cover object-center"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-l from-black/65 via-black/15 to-transparent"
+                className="absolute inset-0 bg-gradient-to-l from-canvas/85 via-canvas/30 to-transparent"
                 aria-hidden
               />
             </motion.div>

@@ -28,7 +28,7 @@ const clients = [
 export function Hero() {
   return (
     <section
-      className="relative min-h-screen bg-black pt-28"
+      className="relative min-h-screen bg-canvas pt-28"
       aria-labelledby="hero-heading"
     >
       <MetallicBlob className="min-h-screen" />

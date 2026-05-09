@@ -6,12 +6,11 @@ export function About() {
   return (
     <section
       id="about"
-      data-cursor-light
       className="bg-paper px-5 py-24 text-ink md:px-8"
       aria-labelledby="about-heading"
     >
       <div className="mx-auto max-w-[1400px]">
-        <p className="font-mono-label text-ash">§ 02</p>
+        <p className="font-mono-label text-ash">— 02</p>
 
         <h2
           id="about-heading"
@@ -65,7 +64,7 @@ export function About() {
           </ScrollReveal>
         </div>
 
-        <div className="mt-16 inline-flex rounded-full border border-graphite bg-white/60 px-5 py-2 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink/80">
+        <div className="mt-16 inline-flex rounded-full border border-graphite bg-canvas/90 px-5 py-2 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink/80">
           Lead Product Developer @Interact Studio
         </div>
       </div>

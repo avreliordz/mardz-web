@@ -8,15 +8,15 @@ export function Work() {
   return (
     <section
       id="work"
-      className="bg-black px-5 py-24 md:px-8"
+      className="bg-canvas px-5 py-24 md:px-8"
       aria-labelledby="work-heading"
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">§ 03</p>
+          <p className="font-mono-label text-smoke">— 03</p>
           <h2
             id="work-heading"
-            className="section-title mt-4 text-paper"
+            className="section-title mt-4 text-ink"
           >
             Featured work
           </h2>

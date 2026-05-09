@@ -49,13 +49,13 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="bg-black px-5 py-24 md:px-8"
+      className="bg-canvas px-5 py-24 md:px-8"
       aria-labelledby="experience-heading"
     >
       <div className="mx-auto max-w-[1400px]">
         <ScrollReveal>
-          <p className="font-mono-label text-smoke">§ 05</p>
-          <h2 id="experience-heading" className="section-title mt-4 text-paper">
+          <p className="font-mono-label text-smoke">— 05</p>
+          <h2 id="experience-heading" className="section-title mt-4 text-ink">
             Experience
           </h2>
         </ScrollReveal>
@@ -83,8 +83,8 @@ export function Experience() {
                   <p className="font-mono text-xs uppercase tracking-widest text-ash">
                     {e.range}
                   </p>
-                  <p className="mt-3 font-display text-lg text-paper">{e.org}</p>
-                  <p className="mt-2 text-sm font-medium leading-snug text-paper/90">
+                  <p className="mt-3 font-display text-lg text-ink">{e.org}</p>
+                  <p className="mt-2 text-sm font-medium leading-snug text-ink/90">
                     {e.role}
                   </p>
                   <p className="mt-3 text-sm leading-relaxed text-fog">
@@ -114,12 +114,12 @@ export function Experience() {
             </svg>
             {entries.map((e) => (
               <div key={e.range} className="relative pl-10">
-                <span className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-paper" />
+                <span className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-ink" />
                 <p className="font-mono text-xs uppercase tracking-widest text-ash">
                   {e.range}
                 </p>
-                <p className="mt-2 font-display text-xl text-paper">{e.org}</p>
-                <p className="mt-1 text-sm font-medium leading-snug text-paper/90">
+                <p className="mt-2 font-display text-xl text-ink">{e.org}</p>
+                <p className="mt-1 text-sm font-medium leading-snug text-ink/90">
                   {e.role}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-fog">

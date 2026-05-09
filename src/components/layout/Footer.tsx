@@ -10,7 +10,7 @@ const nav = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-graphite bg-black px-5 py-12 md:px-8">
+    <footer className="border-t border-graphite bg-canvas px-5 py-12 md:px-8">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-10 md:flex-row md:items-center md:justify-between">
         <p className="font-mono text-xs text-ash">
           MARDZ™ © {new Date().getFullYear()} — Monterrey, MX
@@ -20,7 +20,7 @@ export function Footer() {
           aria-label="Footer"
         >
           {nav.map((l) => (
-            <Link key={l.href} href={l.href} className="hover:text-paper">
+            <Link key={l.href} href={l.href} className="hover:text-ink">
               {l.label}
             </Link>
           ))}
