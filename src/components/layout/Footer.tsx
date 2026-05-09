@@ -16,7 +16,7 @@ export function Footer() {
           MARDZ™ © {new Date().getFullYear()} — Monterrey, MX
         </p>
         <nav
-          className="flex flex-wrap gap-6 font-mono uppercase tracking-widest text-fog"
+          className="flex flex-wrap justify-end gap-6 font-mono uppercase tracking-widest text-fog"
           aria-label="Footer"
         >
           {nav.map((l) => (
@@ -25,7 +25,6 @@ export function Footer() {
             </Link>
           ))}
         </nav>
-        <p className="text-ash md:text-end">by Marco Aurelio</p>
       </div>
     </footer>
   );
