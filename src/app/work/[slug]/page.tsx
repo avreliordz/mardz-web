@@ -158,41 +158,6 @@ export default function WorkCasePage({ params }: Props) {
           </div>
         </section>
 
-        <section className="mt-16" aria-labelledby="gallery">
-          <h2 id="gallery" className="font-mono-label text-smoke">
-            Gallery
-          </h2>
-          <div className="mt-8 columns-1 gap-4 sm:columns-2">
-            {study.gallery.map((g, i) => (
-              <div
-                key={`${g.src}-${i}`}
-                className={cn(
-                  "relative mb-4 break-inside-avoid overflow-hidden rounded-sm",
-                  g.src.endsWith(".gif") ? "bg-canvas" : "bg-carbon",
-                )}
-              >
-                {g.src.endsWith(".gif") ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- animated GIF
-                  <img
-                    src={g.src}
-                    alt={g.alt}
-                    className="h-auto w-full bg-canvas object-cover"
-                  />
-                ) : (
-                  <Image
-                    src={g.src}
-                    alt={g.alt}
-                    width={800}
-                    height={600}
-                    className="h-auto w-full object-cover"
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
         <div className="mt-20 border-t border-graphite pt-10">
           <Link
             href="/#work"
