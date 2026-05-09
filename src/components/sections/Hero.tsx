@@ -36,7 +36,7 @@ export function Hero() {
       <div className="pointer-events-none relative z-10 mx-auto flex max-w-[1400px] flex-col px-5 md:px-8">
         <div className="flex flex-col justify-between gap-4 pb-6 text-xs uppercase tracking-[0.2em] text-ash md:flex-row md:items-center">
           <span className="font-mono">Based in Monterrey, MX</span>
-          <span className="font-mono text-right md:text-left">
+          <span className="font-mono">
             Product Developer + Interaction Designer
           </span>
         </div>
