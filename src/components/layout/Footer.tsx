@@ -11,12 +11,12 @@ const nav = [
 export function Footer() {
   return (
     <footer className="border-t border-graphite bg-canvas px-5 py-12 md:px-8">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-10 md:flex-row md:items-center md:justify-between">
-        <p className="font-mono text-xs text-ash">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-10 text-[12px] md:flex-row md:items-center md:justify-between">
+        <p className="font-mono text-ash">
           MARDZ™ © {new Date().getFullYear()} — Monterrey, MX
         </p>
         <nav
-          className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-widest text-fog"
+          className="flex flex-wrap gap-6 font-mono uppercase tracking-widest text-fog"
           aria-label="Footer"
         >
           {nav.map((l) => (
@@ -25,7 +25,7 @@ export function Footer() {
             </Link>
           ))}
         </nav>
-        <p className="text-sm text-ash md:text-end">by Marco Aurelio</p>
+        <p className="text-ash md:text-end">by Marco Aurelio</p>
       </div>
     </footer>
   );
