@@ -26,7 +26,7 @@ export function Footer() {
           ))}
         </nav>
         <p className="text-sm text-ash md:text-end">
-          Designed &amp; built by Marco A. Rodríguez
+          by Marco Aurelio
         </p>
       </div>
     </footer>
