@@ -35,7 +35,7 @@ export function Nav() {
           backdropFilter: backdropFilter,
           WebkitBackdropFilter: backdropFilter,
         }}
-        className="fixed inset-x-0 top-0 z-[110] border-b border-white/43"
+        className="fixed inset-x-0 top-0 z-[110]"
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 md:px-8">
           <Link

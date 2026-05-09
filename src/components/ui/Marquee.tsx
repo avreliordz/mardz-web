@@ -32,7 +32,7 @@ export function Marquee({
   return (
     <div
       className={cn(
-        "relative overflow-hidden border-t border-graphite/80 py-4",
+        "relative overflow-hidden py-4",
         className,
       )}
       aria-label={`Clients: ${text}`}
