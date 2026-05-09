@@ -25,9 +25,7 @@ export function Footer() {
             </Link>
           ))}
         </nav>
-        <p className="text-sm text-ash md:text-end">
-          by Marco Aurelio
-        </p>
+        <p className="text-sm text-ash md:text-end">by Marco Aurelio</p>
       </div>
     </footer>
   );
